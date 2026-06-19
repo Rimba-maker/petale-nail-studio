@@ -1,3 +1,6 @@
+# Internal docs — PRD, notes, design briefs
+*.md
+
 # Dependencies
 node_modules/
 
