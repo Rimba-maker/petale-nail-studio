@@ -1,5 +1,6 @@
 # Internal docs — PRD, notes, design briefs
 *.md
+!CLAUDE.md
 
 # Dependencies
 node_modules/
