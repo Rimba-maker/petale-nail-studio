@@ -170,7 +170,7 @@ export default function Services() {
         {/* Bottom CTA */}
         <div style={{ textAlign: 'center', marginTop: '48px' }}>
           <a href="#booking" className="btn-primary">
-            Book Sekarang ✨
+            <Sparkle size={14} weight="fill" /> Book Sekarang
           </a>
         </div>
 

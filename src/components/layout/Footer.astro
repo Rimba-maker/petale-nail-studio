@@ -1,5 +1,5 @@
 ---
-import { InstagramLogo, TiktokLogo, PinterestLogo, Sparkle } from '@phosphor-icons/react';
+import { InstagramLogo, TiktokLogo, PinterestLogo, Sparkle, FlowerLotus, MapPin } from '@phosphor-icons/react';
 
 const navLinks = [
   { label: 'Services',    href: '#services' },
@@ -23,7 +23,7 @@ const socials = [
       <!-- Brand col -->
       <div class="footer-brand">
         <a href="/" class="footer-logo" aria-label="Petalé Nail Studio">
-          <span style="color: var(--color-rose); font-size: 20px;">✿</span>
+          <FlowerLotus size={20} weight="thin" style={{ color: 'var(--color-rose)' }} />
           <span class="footer-logo-text">Petalé</span>
         </a>
         <p class="footer-tagline">
@@ -51,7 +51,9 @@ const socials = [
         <p class="footer-col-title">Jam Operasional</p>
         <p class="footer-text">Senin – Minggu</p>
         <p class="footer-text" style="color: var(--color-on-dark);">10:00 – 22:00</p>
-        <p class="footer-text" style="margin-top: 12px;">📍 Jakarta & Surabaya</p>
+        <p class="footer-text" style="margin-top: 12px; display: flex; align-items: center; gap: 6px;">
+            <MapPin size={14} weight="regular" /> Jakarta & Surabaya
+          </p>
       </div>
 
       <!-- Newsletter col -->
