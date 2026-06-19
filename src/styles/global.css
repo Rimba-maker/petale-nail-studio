@@ -1,0 +1,248 @@
+@import "tailwindcss";
+
+/* ============================================================
+   PETALE NAIL STUDIO — HYBRID A DESIGN TOKENS
+   Claude (canvas + typography + editorial rhythm)
+   × Airbnb (rose accent + experience storytelling + CTAs)
+   × Pinterest (masonry grid + filter chips + card discovery)
+   ============================================================ */
+
+@theme {
+  /* ── SURFACES (from Claude) ── */
+  --color-canvas:         #faf9f5;
+  --color-surface-soft:   #f5f0e8;
+  --color-surface-card:   #efe9de;
+  --color-surface-blush:  #fdf0f5;
+  --color-surface-dark:   #181715;
+  --color-surface-dark-elevated: #252320;
+  --color-hairline:       #e6dfd8;
+  --color-hairline-soft:  #ebe6df;
+
+  /* ── ROSE ACCENT (Airbnb Rausch → shifted to feminine rose for Petalé) ── */
+  --color-rose:           #c96b8a;
+  --color-rose-deep:      #ad5474;
+  --color-rose-disabled:  #f2c4d4;
+  --color-rose-light:     #f7e2ec;
+
+  /* ── TYPOGRAPHY (Claude warm ink scale) ── */
+  --color-ink:            #141413;
+  --color-body-strong:    #252523;
+  --color-body:           #3d3d3a;
+  --color-muted:          #6c6a64;
+  --color-muted-soft:     #8e8b82;
+  --color-on-primary:     #ffffff;
+  --color-on-dark:        #faf9f5;
+  --color-on-dark-soft:   #a09d96;
+
+  /* ── SEMANTIC ── */
+  --color-success:        #5db872;
+  --color-error:          #c64545;
+
+  /* ── TYPOGRAPHY (Claude editorial system) ──
+     Display: Playfair Display (open-source ≈ Copernicus/Tiempos)
+     Body/UI: DM Sans (humanist sans ≈ StyreneB/Inter)            */
+  --font-display:   'Playfair Display', 'Georgia', serif;
+  --font-body:      'DM Sans', 'Inter', system-ui, sans-serif;
+  --font-mono:      'JetBrains Mono', 'Fira Code', monospace;
+
+  /* ── SPACING (Claude section rhythm × Pinterest tight grid) ── */
+  --spacing-section: 96px;
+  --spacing-xxl:     48px;
+  --spacing-xl:      32px;
+  --spacing-lg:      24px;
+  --spacing-md:      16px;
+  --spacing-sm:      12px;
+  --spacing-xs:      8px;
+  --spacing-xxs:     4px;
+
+  /* ── BORDER RADIUS ──
+     Claude (lg 12px cards) × Pinterest (md 16px interactive, full pill) ── */
+  --radius-xs:   4px;
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   16px;
+  --radius-xl:   24px;
+  --radius-pill: 9999px;
+
+  /* ── SHADOW (single tier, Airbnb-inspired) ── */
+  --shadow-card:  0 2px 8px rgba(20,20,19,0.06), 0 1px 3px rgba(20,20,19,0.04);
+  --shadow-hover: 0 8px 24px rgba(20,20,19,0.10), 0 2px 8px rgba(20,20,19,0.06);
+  --shadow-modal: 0 24px 64px rgba(20,20,19,0.18);
+}
+
+/* ── BASE RESET ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--color-canvas);
+  color: var(--color-body);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+/* ── REUSABLE UTILITY CLASSES ── */
+
+/* Container */
+.container-petale {
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+/* Section rhythm (Claude 96px editorial pacing) */
+.section-rhythm {
+  padding-block: var(--spacing-section);
+}
+
+/* Display typography (Claude: serif weight 400, negative tracking) */
+.display-xl {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 6vw, 64px);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -1.5px;
+  color: var(--color-ink);
+}
+
+.display-lg {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  color: var(--color-ink);
+}
+
+.display-md {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3vw, 36px);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.5px;
+  color: var(--color-ink);
+}
+
+/* Button primary (Airbnb CTA structure × Petalé rose color) */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--color-rose);
+  color: var(--color-on-primary);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  padding: 14px 28px;
+  border-radius: var(--radius-pill);
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-rose-deep);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+  background-color: var(--color-rose-deep);
+}
+
+/* Button secondary */
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: transparent;
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  padding: 13px 27px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-hairline);
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-secondary:hover {
+  border-color: var(--color-ink);
+  background-color: var(--color-surface-soft);
+}
+
+/* Pinterest filter chip */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 18px;
+  border-radius: var(--radius-pill);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+  background-color: var(--color-surface-card);
+  color: var(--color-body);
+}
+
+.chip:hover {
+  background-color: var(--color-hairline);
+}
+
+.chip.active {
+  background-color: var(--color-ink);
+  color: var(--color-on-primary);
+}
+
+/* Badge pill (Claude-inspired) */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-surface-card);
+  color: var(--color-ink);
+}
+
+.badge-rose {
+  background-color: var(--color-rose-light);
+  color: var(--color-rose-deep);
+}
+
+/* Section label (uppercase caption) */
+.section-label {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-rose);
+}
+
+/* Hairline divider */
+.hairline {
+  border: none;
+  border-top: 1px solid var(--color-hairline);
+}

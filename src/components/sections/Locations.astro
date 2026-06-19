@@ -1,0 +1,191 @@
+---
+import { Clock, DeviceMobile, MapPin } from '@phosphor-icons/react';
+
+const branches = [
+  {
+    name: 'Petalé Senayan',
+    tag: 'Flagship',
+    address: 'Plaza Senayan, Lt. 3',
+    city: 'Jakarta Selatan',
+    hours: '10:00 – 22:00',
+    phone: '+62 812-0001-0001',
+    mapSrc: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.2!2d106.7999!3d-6.2271!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zPlaza+Senayan!5e0!3m2!1sen!2sid!4v1700000000000',
+  },
+  {
+    name: 'Petalé Kuningan',
+    tag: '',
+    address: 'Kota Kasablanka, Lt. 2',
+    city: 'Jakarta Selatan',
+    hours: '10:00 – 22:00',
+    phone: '+62 812-0001-0002',
+    mapSrc: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.2!2d106.8369!3d-6.2252!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zKota+Kasablanka!5e0!3m2!1sen!2sid!4v1700000000000',
+  },
+  {
+    name: 'Petalé Surabaya',
+    tag: '',
+    address: 'Pakuwon Mall, Lt. 1',
+    city: 'Surabaya',
+    hours: '10:00 – 22:00',
+    phone: '+62 812-0001-0003',
+    mapSrc: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3957.2!2d112.6546!3d-7.2949!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zPakuwon+Mall!5e0!3m2!1sen!2sid!4v1700000000000',
+  },
+];
+---
+
+<section id="locations" class="section-rhythm locations-section">
+  <div class="container-petale">
+
+    <div class="locations-header">
+      <p class="section-label">Lokasi</p>
+      <h2 class="display-md" style="margin-top: 12px; margin-bottom: 12px;">Mampir Ke Petalé</h2>
+      <p class="locations-sub">3 lokasi strategis di Jakarta & Surabaya, siap menyambut kamu.</p>
+    </div>
+
+    <div class="branches-grid">
+      {branches.map(branch => (
+        <div class="branch-card">
+          {branch.tag && <div class="branch-tag">{branch.tag}</div>}
+
+          <div class="branch-map">
+            <iframe
+              src={branch.mapSrc}
+              title={`Peta ${branch.name}`}
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              style="width:100%;height:100%;border:0;"
+            />
+          </div>
+
+          <div class="branch-info">
+            <h3 class="branch-name">{branch.name}</h3>
+            <p class="branch-address">{branch.address}<br />{branch.city}</p>
+
+            <div class="branch-meta">
+              <div class="meta-item">
+                <span class="meta-icon"><Clock size={15} weight="regular" /></span>
+                <span>{branch.hours} setiap hari</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-icon"><DeviceMobile size={15} weight="regular" /></span>
+                <a href={`tel:${branch.phone}`} class="meta-link">{branch.phone}</a>
+              </div>
+            </div>
+
+            <a
+              href={`https://wa.me/${branch.phone.replace(/\D/g, '')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-primary"
+              style="width: 100%; justify-content: center;"
+            >
+              WhatsApp Studio
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .locations-section {
+    background-color: var(--color-canvas);
+  }
+
+  .locations-header {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+
+  .locations-sub {
+    color: var(--color-muted);
+    max-width: 380px;
+    margin-inline: auto;
+  }
+
+  .branches-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  .branch-card {
+    position: relative;
+    background-color: var(--color-canvas);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-hairline);
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+
+  .branch-card:hover {
+    box-shadow: var(--shadow-hover);
+  }
+
+  .branch-tag {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 1;
+    background-color: var(--color-rose);
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 9999px;
+  }
+
+  .branch-map {
+    height: 180px;
+    background-color: var(--color-surface-card);
+    overflow: hidden;
+  }
+
+  .branch-info {
+    padding: 24px;
+  }
+
+  .branch-name {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--color-ink);
+    margin-bottom: 6px;
+    letter-spacing: -0.2px;
+  }
+
+  .branch-address {
+    font-size: 14px;
+    color: var(--color-muted);
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+
+  .branch-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--color-body);
+  }
+
+  .meta-icon { display: flex; align-items: center; color: var(--color-muted); }
+
+  .meta-link {
+    color: var(--color-rose);
+    text-decoration: none;
+  }
+
+  .meta-link:hover { text-decoration: underline; }
+</style>

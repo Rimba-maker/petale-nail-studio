@@ -1,0 +1,190 @@
+---
+import { Coffee, Handshake, ShieldPlus, Sparkle, PaintBrush, Star, Camera } from '@phosphor-icons/react';
+
+const ICON_PROPS = { size: 26, weight: 'light' as const };
+
+const steps = [
+  { icon: Coffee,      title: 'Welcome Drink',      desc: 'Pilih kopi, teh, atau lemon water' },
+  { icon: Handshake,   title: 'Konsultasi Singkat', desc: 'Diskusi desain & cek kondisi kuku' },
+  { icon: ShieldPlus,  title: 'Sterilization',       desc: 'Tools steril 121°C autoclave depan mata kamu' },
+  { icon: Sparkle,     title: 'Pampering Session',   desc: 'Cuticle care, shaping, base coat' },
+  { icon: PaintBrush,  title: 'Nail Art Magic',      desc: 'Nail artist mulai berkarya' },
+  { icon: Star,        title: 'Top Coat & UV Cure',  desc: 'Finishing untuk hasil tahan lama' },
+  { icon: Camera,      title: 'Photo Moment',        desc: 'Spot foto cantik untuk OOTD nail-mu' },
+];
+---
+
+<section id="process" class="section-rhythm process-section">
+  <div class="container-petale">
+
+    <div class="process-header">
+      <p class="section-label">Pengalaman</p>
+      <h2 class="display-md" style="margin-top: 12px; margin-bottom: 16px;">
+        Pengalaman 90 Menit Bermakna
+      </h2>
+      <p class="process-sub">
+        Dari welcome drink hingga photo moment — setiap momen di Petalé dirancang untuk membuat kamu merasa spesial.
+      </p>
+    </div>
+
+    <div class="timeline">
+      <!-- SVG connector line -->
+      <div class="timeline-line" aria-hidden="true">
+        <svg viewBox="0 0 4 100%" preserveAspectRatio="none" width="4" height="100%">
+          <line x1="2" y1="0" x2="2" y2="100%" stroke="var(--color-rose-light)" stroke-width="2" stroke-dasharray="6 4"/>
+        </svg>
+      </div>
+
+      {steps.map((step, i) => (
+        <div class="step" style={`--delay: ${i * 0.12}s`}>
+          <div class="step-dot">
+            <span class="step-number">{i + 1}</span>
+          </div>
+          <div class="step-card">
+            <span class="step-icon" aria-hidden="true">
+              <step.icon size={24} weight="light" />
+            </span>
+            <div>
+              <h3 class="step-title">{step.title}</h3>
+              <p class="step-desc">{step.desc}</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .process-section {
+    background-color: var(--color-canvas);
+  }
+
+  .process-header {
+    text-align: center;
+    margin-bottom: 72px;
+  }
+
+  .process-sub {
+    color: var(--color-muted);
+    max-width: 460px;
+    margin-inline: auto;
+    line-height: 1.65;
+  }
+
+  .timeline {
+    position: relative;
+    max-width: 640px;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .timeline-line {
+    position: absolute;
+    left: 22px;
+    top: 24px;
+    bottom: 24px;
+    width: 4px;
+    z-index: 0;
+  }
+
+  .step {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    position: relative;
+    z-index: 1;
+    padding-bottom: 32px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: step-in 0.5s ease forwards;
+    animation-delay: var(--delay);
+  }
+
+  .step:last-child {
+    padding-bottom: 0;
+  }
+
+  .step-dot {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: var(--color-rose-light);
+    border: 2px solid var(--color-rose);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s, transform 0.2s;
+  }
+
+  .step:hover .step-dot {
+    background-color: var(--color-rose);
+    transform: scale(1.1);
+  }
+
+  .step-number {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-rose-deep);
+    transition: color 0.2s;
+  }
+
+  .step:hover .step-number {
+    color: #fff;
+  }
+
+  .step-card {
+    flex: 1;
+    background-color: var(--color-surface-card);
+    border-radius: var(--radius-md);
+    padding: 20px 24px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    border: 1px solid var(--color-hairline-soft);
+    transition: box-shadow 0.2s, border-color 0.2s;
+  }
+
+  .step:hover .step-card {
+    box-shadow: var(--shadow-hover);
+    border-color: var(--color-rose-light);
+  }
+
+  .step-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--color-rose);
+    margin-top: 2px;
+  }
+
+  .step-title {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 400;
+    color: var(--color-ink);
+    margin-bottom: 4px;
+    letter-spacing: -0.2px;
+  }
+
+  .step-desc {
+    font-size: 14px;
+    color: var(--color-muted);
+    line-height: 1.55;
+  }
+
+  @keyframes step-in {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 640px) {
+    .timeline-line { display: none; }
+    .step-card { flex-direction: column; gap: 8px; }
+  }
+</style>

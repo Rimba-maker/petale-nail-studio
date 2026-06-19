@@ -1,0 +1,129 @@
+---
+import Navbar from '../components/layout/Navbar.astro';
+import Footer from '../components/layout/Footer.astro';
+import Process from '../components/sections/Process.astro';
+import Membership from '../components/sections/Membership.astro';
+import Locations from '../components/sections/Locations.astro';
+
+import Hero from '../components/sections/Hero';
+import Services from '../components/sections/Services';
+import DesignCatalog from '../components/sections/DesignCatalog';
+import TrendingDesigns from '../components/sections/TrendingDesigns';
+import HygieneStandard from '../components/sections/HygieneStandard';
+import Addons from '../components/sections/Addons';
+import BookCTA from '../components/sections/BookCTA';
+
+import '../styles/global.css';
+
+const seo = {
+  title: 'Petalé Nail Studio — Premium Nail Art Jakarta & Surabaya',
+  description: 'Nail studio dengan 500+ desain, gel polish premium, dan standar hygiene rumah sakit. Manicure, pedicure, acrylic extension, nail art. Book online.',
+  keywords: 'nail art jakarta, nail studio, gel polish jakarta, acrylic extension, manicure premium, nail art surabaya',
+  ogImage: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=1200&h=630&fit=crop&q=80',
+  url: 'https://petale.id',
+};
+---
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#faf9f5" />
+
+  <!-- SEO -->
+  <title>{seo.title}</title>
+  <meta name="description" content={seo.description} />
+  <meta name="keywords" content={seo.keywords} />
+  <link rel="canonical" href={seo.url} />
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content={seo.url} />
+  <meta property="og:title"       content={seo.title} />
+  <meta property="og:description" content={seo.description} />
+  <meta property="og:image"       content={seo.ogImage} />
+  <meta property="og:locale"      content="id_ID" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content={seo.title} />
+  <meta name="twitter:description" content={seo.description} />
+  <meta name="twitter:image"       content={seo.ogImage} />
+
+  <!-- Schema.org: BeautySalon -->
+  <script type="application/ld+json">
+    {JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BeautySalon",
+      "name": "Petalé Nail Studio",
+      "description": seo.description,
+      "url": seo.url,
+      "telephone": "+62-812-0001-0001",
+      "openingHours": "Mo-Su 10:00-22:00",
+      "address": [
+        { "@type": "PostalAddress", "streetAddress": "Plaza Senayan Lt. 3", "addressLocality": "Jakarta Selatan", "addressCountry": "ID" },
+        { "@type": "PostalAddress", "streetAddress": "Kota Kasablanka Lt. 2", "addressLocality": "Jakarta Selatan", "addressCountry": "ID" },
+        { "@type": "PostalAddress", "streetAddress": "Pakuwon Mall Lt. 1", "addressLocality": "Surabaya", "addressCountry": "ID" }
+      ],
+      "priceRange": "Rp 95.000 – Rp 750.000",
+      "sameAs": [
+        "https://instagram.com/petale.id",
+        "https://tiktok.com/@petale.id"
+      ]
+    })}
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <meta name="generator" content={Astro.generator} />
+</head>
+
+<body>
+
+  <!-- 1. Navbar — static -->
+  <Navbar />
+
+  <main>
+    <!-- 2. Hero — React island client:load -->
+    <Hero client:load />
+
+    <!-- 3. Services — React island client:visible -->
+    <Services client:visible />
+
+    <!-- 4. Design Catalog — React island client:visible -->
+    <DesignCatalog client:visible />
+
+    <!-- 5. Trending Designs — React island client:visible -->
+    <TrendingDesigns client:visible />
+
+    <!-- 6. Process — static Astro -->
+    <Process />
+
+    <!-- 7. Hygiene Standard — React island client:visible -->
+    <HygieneStandard client:visible />
+
+    <!-- 8. Add-ons — React island client:visible -->
+    <Addons client:visible />
+
+    <!-- 9. Membership — static Astro -->
+    <Membership />
+
+    <!-- 10. Locations — static Astro -->
+    <Locations />
+
+    <!-- 11. Book CTA — React island client:idle -->
+    <BookCTA client:idle />
+  </main>
+
+  <!-- 12. Footer — static Astro -->
+  <Footer />
+
+</body>
+</html>

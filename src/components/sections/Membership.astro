@@ -1,0 +1,273 @@
+---
+import { FlowerLotus, Diamond, Gift, Check } from '@phosphor-icons/react';
+
+const plans = [
+  {
+    icon: FlowerLotus,
+    name: 'Monthly Beauty Pass',
+    price: 'Rp 850k',
+    period: '/ bulan',
+    perks: ['1× Gel Manicure', '1× Gel Pedicure', '10% off nail art', '5% off acrylic & BIAB'],
+    highlighted: false,
+    cta: 'Mulai Berlangganan',
+  },
+  {
+    icon: Diamond,
+    name: 'Quarterly Indulgence',
+    price: 'Rp 2.4jt',
+    period: '/ 3 bulan',
+    tag: 'Hemat 15%',
+    perks: ['3× Gel Manicure', '3× Gel Pedicure', '1× Spa Pedicure', '15% off everything', 'Free hand spa monthly'],
+    highlighted: true,
+    cta: 'Pilih Quarterly',
+  },
+];
+---
+
+<section id="membership" class="section-rhythm membership-section">
+  <div class="container-petale">
+
+    <div class="membership-header">
+      <p class="section-label">Members</p>
+      <h2 class="display-md" style="margin-top: 12px; margin-bottom: 12px;">Petalé Members</h2>
+      <p class="membership-sub">
+        Jadi member dan nikmati harga eksklusif setiap bulan. Karena kuku cantik bukan sesekali, tapi lifestyle.
+      </p>
+    </div>
+
+    <div class="plans-grid">
+      {plans.map(plan => (
+        <div class={`plan-card${plan.highlighted ? ' plan-highlighted' : ''}`}>
+          {plan.tag && (
+            <div class="plan-tag">{plan.tag}</div>
+          )}
+          <div class="plan-icon">
+            <plan.icon size={36} weight="light" />
+          </div>
+          <h3 class="plan-name">{plan.name}</h3>
+          <div class="plan-price">
+            <span class="price-number">{plan.price}</span>
+            <span class="price-period">{plan.period}</span>
+          </div>
+          <ul class="plan-perks">
+            {plan.perks.map(perk => (
+              <li class="perk-item">
+                <span class="perk-check"><Check size={13} weight="bold" /></span>
+                {perk}
+              </li>
+            ))}
+          </ul>
+          <a href="#booking" class={plan.highlighted ? 'btn-on-dark' : 'btn-primary'}>
+            {plan.cta}
+          </a>
+        </div>
+      ))}
+    </div>
+
+    <!-- Gift Card -->
+    <div class="gift-card">
+      <div class="gift-content">
+        <span class="gift-emoji"><Gift size={40} weight="light" /></span>
+        <div>
+          <h3 class="gift-title">Gift Card Petalé</h3>
+          <p class="gift-desc">Mulai Rp 200k, fleksibel sesuai layanan. Hadiah yang pasti disukai.</p>
+        </div>
+      </div>
+      <a href="#booking" class="btn-secondary">Beli Gift Card</a>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .membership-section {
+    background-color: var(--color-surface-soft);
+  }
+
+  .membership-header {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+
+  .membership-sub {
+    color: var(--color-muted);
+    max-width: 440px;
+    margin-inline: auto;
+    line-height: 1.65;
+  }
+
+  .plans-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    max-width: 720px;
+    margin-inline: auto;
+    margin-bottom: 24px;
+  }
+
+  .plan-card {
+    position: relative;
+    background-color: var(--color-canvas);
+    border-radius: var(--radius-lg);
+    padding: 36px 32px;
+    border: 1px solid var(--color-hairline);
+    transition: box-shadow 0.2s;
+  }
+
+  .plan-card:hover {
+    box-shadow: var(--shadow-hover);
+  }
+
+  .plan-highlighted {
+    background-color: var(--color-surface-dark);
+    border-color: transparent;
+  }
+
+  .plan-tag {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--color-rose);
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 9999px;
+    white-space: nowrap;
+  }
+
+  .plan-icon {
+    font-size: 36px;
+    margin-bottom: 16px;
+    line-height: 1;
+  }
+
+  .plan-name {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--color-ink);
+    margin-bottom: 16px;
+    letter-spacing: -0.3px;
+  }
+
+  .plan-highlighted .plan-name {
+    color: var(--color-on-dark);
+  }
+
+  .plan-price {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    margin-bottom: 28px;
+  }
+
+  .price-number {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--color-rose);
+    letter-spacing: -0.5px;
+  }
+
+  .price-period {
+    font-size: 14px;
+    color: var(--color-muted-soft);
+  }
+
+  .plan-highlighted .price-period {
+    color: var(--color-on-dark-soft);
+  }
+
+  .plan-perks {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+
+  .perk-item {
+    display: flex;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--color-body);
+    line-height: 1.4;
+  }
+
+  .plan-highlighted .perk-item {
+    color: var(--color-on-dark-soft);
+  }
+
+  .perk-check {
+    color: var(--color-rose);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* Button for dark card */
+  .btn-on-dark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 14px 28px;
+    border-radius: var(--radius-pill);
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .btn-on-dark:hover { opacity: 0.88; }
+
+  /* Gift card strip */
+  .gift-card {
+    max-width: 720px;
+    margin-inline: auto;
+    background-color: var(--color-rose-light);
+    border-radius: var(--radius-lg);
+    padding: 24px 32px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    border: 1px solid var(--color-rose-disabled);
+  }
+
+  .gift-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex: 1;
+  }
+
+  .gift-emoji { display: flex; align-items: center; color: var(--color-rose); }
+
+  .gift-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--color-ink);
+    margin-bottom: 4px;
+  }
+
+  .gift-desc {
+    font-size: 14px;
+    color: var(--color-muted);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 640px) {
+    .gift-card { flex-direction: column; align-items: flex-start; }
+  }
+</style>

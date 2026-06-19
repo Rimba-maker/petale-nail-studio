@@ -1,0 +1,258 @@
+---
+import { InstagramLogo, TiktokLogo, PinterestLogo, Sparkle } from '@phosphor-icons/react';
+
+const navLinks = [
+  { label: 'Services',    href: '#services' },
+  { label: 'Designs',     href: '#catalog' },
+  { label: 'Membership',  href: '#membership' },
+  { label: 'Lokasi',      href: '#locations' },
+];
+
+const socials = [
+  { label: 'Instagram', href: 'https://instagram.com/petale.id',  Icon: InstagramLogo },
+  { label: 'TikTok',    href: 'https://tiktok.com/@petale.id',    Icon: TiktokLogo },
+  { label: 'Pinterest', href: 'https://pinterest.com/petale_id',  Icon: PinterestLogo },
+];
+---
+
+<footer class="footer">
+  <div class="container-petale">
+
+    <div class="footer-grid">
+
+      <!-- Brand col -->
+      <div class="footer-brand">
+        <a href="/" class="footer-logo" aria-label="Petalé Nail Studio">
+          <span style="color: var(--color-rose); font-size: 20px;">✿</span>
+          <span class="footer-logo-text">Petalé</span>
+        </a>
+        <p class="footer-tagline">
+          <em>"Crafted, polished, loved."</em>
+        </p>
+        <div class="socials">
+          {socials.map(s => (
+            <a href={s.href} target="_blank" rel="noopener noreferrer" class="social-link" aria-label={s.label}>
+              <s.Icon size={18} weight="regular" />
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <!-- Nav col -->
+      <div class="footer-col">
+        <p class="footer-col-title">Studio</p>
+        {navLinks.map(l => (
+          <a href={l.href} class="footer-link">{l.label}</a>
+        ))}
+      </div>
+
+      <!-- Hours col -->
+      <div class="footer-col">
+        <p class="footer-col-title">Jam Operasional</p>
+        <p class="footer-text">Senin – Minggu</p>
+        <p class="footer-text" style="color: var(--color-on-dark);">10:00 – 22:00</p>
+        <p class="footer-text" style="margin-top: 12px;">📍 Jakarta & Surabaya</p>
+      </div>
+
+      <!-- Newsletter col -->
+      <div class="footer-col">
+        <p class="footer-col-title">Design Inspo</p>
+        <p class="footer-text" style="margin-bottom: 14px;">
+          Get monthly design inspo & exclusive promo — langsung ke inbox-mu.
+        </p>
+        <form class="newsletter-form" onsubmit="event.preventDefault(); this.querySelector('input').value = ''; this.querySelector('.nl-thanks').style.display='block';">
+          <input
+            type="email"
+            placeholder="email kamu..."
+            required
+            class="nl-input"
+          />
+          <button type="submit" class="nl-btn">
+            <Sparkle size={14} weight="fill" />
+          </button>
+          <p class="nl-thanks" style="display:none; font-size: 13px; color: var(--color-rose); margin-top: 8px;">
+            Makasih! Cek inbox ya 🌸
+          </p>
+        </form>
+      </div>
+
+    </div>
+
+    <hr class="footer-divider" />
+
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2025 Petalé Nail Studio. All rights reserved.</p>
+      <p class="footer-copy">Tiny Canvas, Big Statement.</p>
+    </div>
+
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background-color: var(--color-surface-dark);
+    padding-block: 64px 32px;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1.6fr;
+    gap: 40px;
+    margin-bottom: 56px;
+  }
+
+  .footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .footer-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+
+  .footer-logo-text {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--color-on-dark);
+    letter-spacing: -0.3px;
+  }
+
+  .footer-tagline {
+    font-family: var(--font-display);
+    font-size: 14px;
+    color: var(--color-on-dark-soft);
+    font-style: italic;
+    letter-spacing: 0.2px;
+  }
+
+  .socials {
+    display: flex;
+    gap: 8px;
+  }
+
+  .social-link {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    text-decoration: none;
+    transition: border-color 0.2s, background-color 0.2s;
+  }
+
+  .social-link:hover {
+    border-color: var(--color-rose);
+    background-color: rgba(201,107,138,0.12);
+  }
+
+  .footer-col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .footer-col-title {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--color-on-dark);
+    margin-bottom: 4px;
+  }
+
+  .footer-link {
+    font-size: 14px;
+    color: var(--color-on-dark-soft);
+    text-decoration: none;
+    transition: color 0.2s;
+    line-height: 1.4;
+  }
+
+  .footer-link:hover { color: var(--color-on-dark); }
+
+  .footer-text {
+    font-size: 14px;
+    color: var(--color-on-dark-soft);
+    line-height: 1.5;
+  }
+
+  /* Newsletter */
+  .newsletter-form {
+    position: relative;
+  }
+
+  .nl-input {
+    width: 100%;
+    padding: 11px 48px 11px 16px;
+    border-radius: 9999px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background-color: rgba(255,255,255,0.06);
+    color: var(--color-on-dark);
+    font-family: var(--font-body);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .nl-input::placeholder { color: var(--color-on-dark-soft); }
+  .nl-input:focus { border-color: var(--color-rose); }
+
+  .nl-btn {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background-color: var(--color-rose);
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+  }
+
+  .nl-btn:hover { background-color: var(--color-rose-deep); }
+
+  /* Divider & bottom */
+  .footer-divider {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 24px;
+  }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .footer-copy {
+    font-size: 13px;
+    color: var(--color-on-dark-soft);
+  }
+
+  @media (max-width: 1024px) {
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 640px) {
+    .footer-grid { grid-template-columns: 1fr; }
+    .footer-bottom { flex-direction: column; text-align: center; }
+  }
+</style>
