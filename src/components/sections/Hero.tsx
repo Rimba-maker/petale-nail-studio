@@ -1,4 +1,4 @@
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion, useReducedMotion, type Variants } from 'framer-motion';
 import { FlowerLotus, Sparkle, Star, PaintBrush } from '@phosphor-icons/react';
 
 type PetalType = 'flower' | 'sparkle' | 'star';
@@ -21,7 +21,7 @@ const PetalIcon = ({ type, size }: { type: PetalType; size: number }) => {
   return <FlowerLotus {...props} />;
 };
 
-const cuteReveal = {
+const cuteReveal: Variants = {
   hidden: { opacity: 0, scale: 0.92, y: 24 },
   visible: (i: number) => ({
     opacity: 1, scale: 1, y: 0,

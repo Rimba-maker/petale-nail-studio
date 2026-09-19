@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import { PaintBrush, Footprints, Palette, Sparkle } from '@phosphor-icons/react';
 
 type Tab = 'manicure' | 'pedicure' | 'nailart';
@@ -32,7 +32,7 @@ const tabs: { id: Tab; label: string }[] = [
   { id: 'nailart',  label: 'Nail Art' },
 ];
 
-const cardVariants = {
+const cardVariants: Variants = {
   hidden: { opacity: 0, y: 28, scale: 0.96 },
   visible: (i: number) => ({
     opacity: 1, y: 0, scale: 1,
