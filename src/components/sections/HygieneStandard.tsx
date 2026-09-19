@@ -1,122 +1,73 @@
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
-import { Microscope, Drop, ShieldCheck, Flask } from '@phosphor-icons/react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { Check, Thermometer, ShieldCheck } from '@phosphor-icons/react';
+import { imgProps } from '../../data/photos';
 
-const ICO = { size: 36, weight: 'light' as const, color: 'var(--color-rose)' };
-
-const standards = [
-  {
-    icon: <Microscope {...ICO} />,
-    title: 'Autoclave Sterilization 121°C',
-    desc: 'Semua tool metal di-steril per klien menggunakan autoclave berstandar medis.',
-  },
-  {
-    icon: <Drop {...ICO} />,
-    title: 'Single-Use Items',
-    desc: 'Buffer, file, dan tissue sekali pakai — tidak pernah di-recycle antar klien.',
-  },
-  {
-    icon: <ShieldCheck {...ICO} />,
-    title: 'Fresh Gloves Per Session',
-    desc: 'Sarung tangan baru untuk setiap klien, tanpa kompromi.',
-  },
-  {
-    icon: <Flask {...ICO} />,
-    title: 'Hospital-Grade Disinfectant',
-    desc: 'Meja & alat di-disinfect dengan produk klinik setelah setiap sesi.',
-  },
+const checks = [
+  { title: 'Autoclave 121°C',            desc: 'Semua tool metal disterilisasi untuk setiap klien, di depan matamu.' },
+  { title: 'Barang sekali pakai',        desc: 'Buffer, file, dan tissue baru untuk setiap sesi, lalu dibuang.' },
+  { title: 'Sarung tangan baru',         desc: 'Nail artist ganti sarung tangan tiap klien, tanpa terkecuali.' },
+  { title: 'Disinfektan grade klinik',   desc: 'Meja dan alat didisinfeksi setiap selesai, sebelum klien berikutnya duduk.' },
 ];
 
 export default function HygieneStandard() {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: '-10%' });
+  const reduced = useReducedMotion();
 
   return (
-    <section
-      id="hygiene"
-      className="section-rhythm"
-      style={{ backgroundColor: 'var(--color-surface-dark)' }}
-    >
-      <div className="container-petale" ref={ref}>
+    <section id="hygiene" className="section-rhythm hygiene-section" data-flavor="matcha">
+      <div className="container-petale hygiene-grid">
 
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          style={{ textAlign: 'center', marginBottom: '56px' }}
-        >
-          <p style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: '12px',
-            fontWeight: 500,
-            letterSpacing: '2px',
-            textTransform: 'uppercase',
-            color: 'var(--color-rose)',
-            marginBottom: '12px',
-          }}>
-            Standar Kami
-          </p>
-          <h2
-            className="display-md"
-            style={{ color: 'var(--color-on-dark)', marginBottom: '16px' }}
+        <div className="hygiene-visual">
+          <div className="hygiene-photo photo-frame arch">
+            <img {...imgProps('glovesBlue', 480, 620)} />
+          </div>
+          <div className="hygiene-photo-2 photo-frame">
+            <img {...imgProps('toolsGloves', 240, 240)} />
+          </div>
+          <motion.div
+            className="stamp"
+            aria-hidden="true"
+            initial={reduced ? false : { scale: 2.2, opacity: 0, rotate: -40 }}
+            whileInView={{ scale: 1, opacity: 1, rotate: -12 }}
+            viewport={{ once: true }}
+            transition={{ type: 'spring', stiffness: 260, damping: 14, delay: 0.3 }}
           >
-            Hygiene Bukan Pilihan,<br />Tapi Standar.
-          </h2>
-          <p style={{ color: 'var(--color-on-dark-soft)', maxWidth: '480px', marginInline: 'auto', lineHeight: '1.65' }}>
-            Kami tahu kuku bersentuhan dengan banyak hal. Karena itu, hygiene kami mengikuti standar klinik — bukan salon biasa.
-          </p>
-        </motion.div>
+            <Thermometer size={26} weight="fill" />
+            <strong>STERIL</strong>
+            <span>121°C</span>
+          </motion.div>
+        </div>
 
-        {/* Cards */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
-          gap: '16px',
-        }}>
-          {standards.map((item, i) => (
-            <motion.div
-              key={item.title}
-              initial={{ opacity: 0, y: 32 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: i * 0.1, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-              whileHover={{
-                boxShadow: `0 0 0 1px var(--color-rose), 0 8px 32px rgba(201,107,138,0.18)`,
-              }}
-              style={{
-                backgroundColor: 'var(--color-surface-dark-elevated)',
-                borderRadius: 'var(--radius-md)',
-                padding: '32px',
-                border: '1px solid rgba(255,255,255,0.06)',
-                transition: 'border-color 0.2s',
-              }}
-            >
-              <motion.div
-                style={{ marginBottom: '20px', display: 'flex' }}
-                initial={{ rotate: 0 }}
-                animate={inView ? { rotate: [0, 360] } : {}}
-                transition={{ delay: i * 0.1 + 0.2, duration: 0.6, ease: 'easeOut' }}
+        <div className="hygiene-copy">
+          <h2 className="display-lg">Bersih Bukan Bonus, Tapi Standar.</h2>
+          <p className="lede">Kuku bersentuhan dengan banyak hal. Karena itu kebersihan kami mengikuti standar klinik, bukan salon biasa.</p>
+
+          <ul className="check-list">
+            {checks.map((c, i) => (
+              <motion.li
+                key={c.title}
+                initial={reduced ? false : { opacity: 0, x: 24 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: '0px 0px -8% 0px' }}
+                transition={{ type: 'spring', stiffness: 280, damping: 22, delay: i * 0.1 }}
               >
-                {item.icon}
-              </motion.div>
+                <motion.span
+                  className="check-mark"
+                  initial={reduced ? false : { scale: 0, rotate: -90 }}
+                  whileInView={{ scale: 1, rotate: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ type: 'spring', stiffness: 500, damping: 12, delay: 0.25 + i * 0.1 }}
+                >
+                  <Check size={18} weight="bold" />
+                </motion.span>
+                <div>
+                  <h3>{c.title}</h3>
+                  <p>{c.desc}</p>
+                </div>
+              </motion.li>
+            ))}
+          </ul>
 
-              <h3 style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: '17px',
-                fontWeight: 400,
-                color: 'var(--color-on-dark)',
-                marginBottom: '10px',
-                letterSpacing: '-0.2px',
-                lineHeight: '1.3',
-              }}>
-                {item.title}
-              </h3>
-
-              <p style={{ fontSize: '14px', color: 'var(--color-on-dark-soft)', lineHeight: '1.6' }}>
-                {item.desc}
-              </p>
-            </motion.div>
-          ))}
+          <p className="hygiene-note"><ShieldCheck size={18} weight="fill" /> Mau lihat prosesnya langsung? Minta nail artist kami menunjukkan alatnya.</p>
         </div>
 
       </div>

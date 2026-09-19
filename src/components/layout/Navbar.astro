@@ -1,216 +1,122 @@
 ---
 import { FlowerLotus, Sparkle } from '@phosphor-icons/react';
+
+const links = [
+  { href: '#services', label: 'Menu' },
+  { href: '#catalog', label: 'Desain' },
+  { href: '#membership', label: 'Member' },
+  { href: '#locations', label: 'Lokasi' },
+];
 ---
 
 <header id="navbar" class="navbar">
-  <div class="container-petale navbar-inner">
+  <div class="navbar-pill">
 
-    <!-- Logo -->
-    <a href="/" class="navbar-logo" aria-label="Petalé Nail Studio home">
-      <span class="logo-petal"><FlowerLotus size={22} weight="thin" /></span>
+    <a href="#top" class="navbar-logo" aria-label="Petalé Nail Studio, ke atas">
+      <span class="logo-mark"><FlowerLotus size={22} weight="fill" /></span>
       <span class="logo-text">Petalé</span>
     </a>
 
-    <!-- Desktop nav -->
-    <nav class="navbar-nav" aria-label="Main navigation">
-      <a href="#services" class="nav-link">Services</a>
-      <a href="#catalog" class="nav-link">Designs</a>
-      <a href="#membership" class="nav-link">Membership</a>
-      <a href="#locations" class="nav-link">Lokasi</a>
+    <nav class="navbar-nav" aria-label="Navigasi utama">
+      {links.map(l => <a href={l.href} class="nav-link">{l.label}</a>)}
     </nav>
 
-    <!-- CTA -->
-    <div class="navbar-cta">
-      <a href="#booking" class="btn-primary">
-        <Sparkle size={14} weight="fill" />Book Now
-      </a>
-    </div>
+    <a href="#booking" class="btn-primary navbar-cta"><Sparkle size={15} weight="fill" /> Pesan</a>
 
-    <!-- Mobile hamburger -->
-    <button class="hamburger" id="hamburger-btn" aria-label="Toggle menu" aria-expanded="false">
-      <span></span>
-      <span></span>
-      <span></span>
+    <button class="hamburger" id="hamburger-btn" aria-label="Buka menu" aria-expanded="false" aria-controls="mobile-drawer">
+      <span></span><span></span><span></span>
     </button>
   </div>
 
-  <!-- Mobile drawer -->
   <div class="mobile-drawer" id="mobile-drawer" aria-hidden="true">
-    <nav class="mobile-nav">
-      <a href="#services" class="mobile-nav-link">Services</a>
-      <a href="#catalog" class="mobile-nav-link">Designs</a>
-      <a href="#membership" class="mobile-nav-link">Membership</a>
-      <a href="#locations" class="mobile-nav-link">Lokasi</a>
-      <a href="#booking" class="btn-primary" style="margin-top: 8px; justify-content: center;">
-        <Sparkle size={14} weight="fill" />Book Now
-      </a>
+    <nav class="mobile-nav" aria-label="Navigasi seluler">
+      {links.map(l => <a href={l.href} class="mobile-nav-link">{l.label}</a>)}
+      <a href="#booking" class="btn-primary"><Sparkle size={15} weight="fill" /> Pesan slot</a>
     </nav>
   </div>
 </header>
 
 <style>
   .navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    background-color: rgba(250, 249, 245, 0.92);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid transparent;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    position: fixed; top: 12px; left: 0; right: 0; z-index: 100;
+    padding-inline: 12px; pointer-events: none;
   }
-
-  .navbar.scrolled {
-    border-bottom-color: var(--color-hairline);
-    box-shadow: 0 1px 16px rgba(20, 20, 19, 0.06);
+  .navbar-pill {
+    pointer-events: auto;
+    max-width: 1100px; margin-inline: auto;
+    display: flex; align-items: center; gap: 16px;
+    height: 64px; padding: 0 10px 0 20px;
+    background: var(--color-milk);
+    border: var(--outline); border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-float);
   }
-
-  .navbar-inner {
-    display: flex;
-    align-items: center;
-    gap: 32px;
-    height: 72px;
+  .navbar-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; flex: none; }
+  .logo-mark {
+    display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%;
+    background: var(--color-rose); border: 2.5px solid var(--color-cocoa); color: var(--color-cocoa);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
+  .navbar-logo:hover .logo-mark { transform: rotate(72deg) scale(1.1); }
+  .logo-text { font-family: var(--font-display); font-size: 26px; color: var(--color-cocoa); line-height: 1; }
 
-  .navbar-logo {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    flex-shrink: 0;
-  }
-
-  .logo-petal {
-    font-size: 22px;
-    color: var(--color-rose);
-    line-height: 1;
-  }
-
-  .logo-text {
-    font-family: var(--font-display);
-    font-size: 22px;
-    font-weight: 500;
-    color: var(--color-ink);
-    letter-spacing: -0.3px;
-  }
-
-  .navbar-nav {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    flex: 1;
-    justify-content: center;
-  }
-
+  .navbar-nav { display: flex; gap: 2px; flex: 1; justify-content: center; }
   .nav-link {
-    font-family: var(--font-body);
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--color-muted);
-    text-decoration: none;
-    padding: 8px 14px;
-    border-radius: var(--radius-sm);
-    transition: color 0.2s ease, background-color 0.2s ease;
+    font-weight: 800; font-size: 15px; color: var(--color-cocoa); text-decoration: none;
+    padding: 9px 16px; border-radius: var(--radius-pill);
+    transition: background-color 0.15s, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
+  .nav-link:hover { background: var(--color-mango-soft); transform: translateY(-2px) rotate(-1.5deg); }
+  .navbar-cta { min-height: 44px; }
 
-  .nav-link:hover {
-    color: var(--color-ink);
-    background-color: var(--color-surface-soft);
-  }
-
-  .navbar-cta {
-    flex-shrink: 0;
-  }
-
-  /* Hamburger */
   .hamburger {
-    display: none;
-    flex-direction: column;
-    gap: 5px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 8px;
-    margin-left: auto;
+    display: none; flex-direction: column; justify-content: center; gap: 5px;
+    width: 44px; height: 44px; margin-left: auto; padding: 0 11px;
+    background: var(--color-mango-soft); border: 2px solid var(--color-cocoa); border-radius: 50%; cursor: pointer;
   }
-
-  .hamburger span {
-    display: block;
-    width: 22px;
-    height: 2px;
-    background-color: var(--color-ink);
-    border-radius: 2px;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-  }
-
-  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger span { display: block; height: 2.5px; background: var(--color-cocoa); border-radius: 2px; transition: transform 0.25s ease, opacity 0.2s ease; }
+  .hamburger.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
   .hamburger.open span:nth-child(2) { opacity: 0; }
-  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
 
-  /* Mobile drawer */
   .mobile-drawer {
-    display: none;
-    overflow: hidden;
-    max-height: 0;
-    transition: max-height 0.35s ease;
-    border-top: 1px solid var(--color-hairline-soft);
+    pointer-events: auto; display: none;
+    max-width: 1100px; margin: 10px auto 0;
+    grid-template-rows: 0fr; visibility: hidden;
+    background: var(--color-milk); border: var(--outline); border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-float);
+    transition: grid-template-rows 0.3s ease, visibility 0.3s;
   }
-
-  .mobile-drawer.open {
-    max-height: 320px;
-  }
-
-  .mobile-nav {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: 16px 24px 24px;
-  }
-
+  .mobile-drawer.open { grid-template-rows: 1fr; visibility: visible; }
+  .mobile-nav { display: flex; flex-direction: column; gap: 4px; padding: 14px; min-height: 0; overflow: hidden; }
   .mobile-nav-link {
-    font-family: var(--font-body);
-    font-size: 16px;
-    font-weight: 500;
-    color: var(--color-ink);
-    text-decoration: none;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--color-hairline-soft);
+    font-weight: 800; font-size: 18px; color: var(--color-cocoa); text-decoration: none;
+    padding: 12px 16px; border-radius: var(--radius-md);
   }
+  .mobile-nav-link:hover { background: var(--color-mango-soft); }
+  .mobile-nav .btn-primary { margin-top: 6px; }
 
-  @media (max-width: 768px) {
-    .navbar-nav, .navbar-cta { display: none; }
-    .hamburger { display: flex; }
-    .mobile-drawer { display: block; }
+  @media (max-width: 820px) {
+    .navbar-nav { display: none; }
+    .navbar-cta { margin-left: auto; min-height: 42px; padding: 0 18px; }
+    .hamburger { display: flex; margin-left: 0; }
+    .mobile-drawer { display: grid; }
+    .navbar-pill { padding-right: 10px; }
   }
 </style>
 
 <script>
-  // Scroll effect
-  const navbar = document.getElementById('navbar');
-  const onScroll = () => {
-    navbar?.classList.toggle('scrolled', window.scrollY > 16);
-  };
-  window.addEventListener('scroll', onScroll, { passive: true });
-
-  // Hamburger toggle
   const btn = document.getElementById('hamburger-btn');
   const drawer = document.getElementById('mobile-drawer');
-  btn?.addEventListener('click', () => {
-    const open = btn.classList.toggle('open');
-    btn.setAttribute('aria-expanded', String(open));
+
+  const setOpen = (open: boolean) => {
+    btn?.classList.toggle('open', open);
+    btn?.setAttribute('aria-expanded', String(open));
+    btn?.setAttribute('aria-label', open ? 'Tutup menu' : 'Buka menu');
     drawer?.classList.toggle('open', open);
     drawer?.setAttribute('aria-hidden', String(!open));
-  });
+  };
 
-  // Close drawer on nav link click
-  drawer?.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
-      btn?.classList.remove('open');
-      btn?.setAttribute('aria-expanded', 'false');
-      drawer.classList.remove('open');
-      drawer.setAttribute('aria-hidden', 'true');
-    });
-  });
+  btn?.addEventListener('click', () => setOpen(!btn.classList.contains('open')));
+  drawer?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setOpen(false)));
+  document.addEventListener('keydown', e => e.key === 'Escape' && setOpen(false));
 </script>

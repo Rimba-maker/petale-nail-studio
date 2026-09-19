@@ -13,23 +13,25 @@ import HygieneStandard from '../components/sections/HygieneStandard';
 import Addons from '../components/sections/Addons';
 import BookCTA from '../components/sections/BookCTA';
 
+import { photoUrl } from '../data/photos';
 import '../styles/global.css';
+import '../styles/sections.css';
 
 const seo = {
   title: 'Petalé Nail Studio — Premium Nail Art Jakarta & Surabaya',
   description: 'Nail studio dengan 500+ desain, gel polish premium, dan standar hygiene rumah sakit. Manicure, pedicure, acrylic extension, nail art. Book online.',
   keywords: 'nail art jakarta, nail studio, gel polish jakarta, acrylic extension, manicure premium, nail art surabaya',
-  ogImage: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=1200&h=630&fit=crop&q=80',
-  url: 'https://petale.id',
+  ogImage: photoUrl('stiletto3d', 1200, 630),
+  url: new URL(import.meta.env.BASE_URL, Astro.site).href, // GitHub Pages URL in production
 };
 ---
 
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-flavor="strawberry">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#faf9f5" />
+  <meta name="theme-color" content="#fff7f1" />
 
   <!-- SEO -->
   <title>{seo.title}</title>
@@ -78,7 +80,7 @@ const seo = {
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Nunito:wght@400;600;700;800&family=Courier+Prime:wght@400;700&display=swap"
     rel="stylesheet"
   />
 
@@ -86,11 +88,12 @@ const seo = {
 </head>
 
 <body>
+  <a href="#main" class="skip-link">Lompat ke konten</a>
 
   <!-- 1. Navbar — static -->
   <Navbar />
 
-  <main>
+  <main id="main">
     <!-- 2. Hero — React island client:load -->
     <Hero client:load />
 

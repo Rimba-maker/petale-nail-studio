@@ -1,143 +1,69 @@
-import { useRef, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useRef } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { ArrowLeft, ArrowRight, Fire } from '@phosphor-icons/react';
+import { imgProps, type PhotoKey } from '../../data/photos';
 
-const B = 'https://images.unsplash.com';
-const Q = 'auto=format&fit=crop&q=80&w=400';
-
-const trending = [
-  { id: 1, name: 'Glazed Donut',  tag: '#glazeddonut',  src: `${B}/photo-1604654894610-df63bc536371?${Q}&h=530`,              service: 'Chrome / Foil' },
-  { id: 2, name: 'Soft Minimal',  tag: '#softminimal',  src: `${B}/photo-1604654894610-df63bc536371?${Q}&h=530&crop=entropy`, service: 'Basic Manicure' },
-  { id: 3, name: 'Y2K Chrome',    tag: '#y2kchrome',    src: `${B}/photo-1519014816548-bf5fe059798b?${Q}&h=530`,              service: '3D / Chrome' },
-  { id: 4, name: 'Vanilla Latte', tag: '#vanillalatte', src: `${B}/photo-1519014816548-bf5fe059798b?${Q}&h=530&crop=top`,     service: 'Gel Polish' },
-  { id: 5, name: 'Blush French',  tag: '#blushfrench',  src: `${B}/photo-1604654894610-df63bc536371?${Q}&h=530&crop=top`,    service: 'Gel Polish' },
-  { id: 6, name: '3D Jelly',      tag: '#3djelly',      src: `${B}/photo-1604654894610-df63bc536371?${Q}&h=530&crop=bottom`, service: '3D Art' },
-  { id: 7, name: 'Marble Swirl',  tag: '#marbleswirl',  src: `${B}/photo-1519014816548-bf5fe059798b?${Q}&h=530&crop=center`, service: 'Detailed Art' },
-  { id: 8, name: 'Sakura Garden', tag: '#sakuragarden', src: `${B}/photo-1519014816548-bf5fe059798b?${Q}&h=530&crop=bottom`, service: 'Floral Art' },
+const trending: { rank: number; name: string; tag: string; photo: PhotoKey; flavor: string }[] = [
+  { rank: 1, name: 'Heart Milk',      tag: '#heartfrench',   photo: 'heartsPink',    flavor: 'strawberry' },
+  { rank: 2, name: '3D Pastel Pop',   tag: '#3dnails',       photo: 'stiletto3d',    flavor: 'taro' },
+  { rank: 3, name: 'Sprinkle Party',  tag: '#polkadotnails', photo: 'polkaBottles',  flavor: 'mango' },
+  { rank: 4, name: 'Blueberry Ombre', tag: '#ombrenails',    photo: 'blueOmbre',     flavor: 'blueberry' },
+  { rank: 5, name: 'Taro Latte',      tag: '#pastelnails',   photo: 'lilacPastel',   flavor: 'taro' },
+  { rank: 6, name: 'Coral Crush',     tag: '#coralnails',    photo: 'coralPink',     flavor: 'strawberry' },
+  { rank: 7, name: 'Daisy Matcha',    tag: '#daisynails',    photo: 'frenchDaisy',   flavor: 'matcha' },
+  { rank: 8, name: 'Sky Doodle',      tag: '#skynails',      photo: 'skyDoodle',     flavor: 'blueberry' },
 ];
 
 export default function TrendingDesigns() {
-  const trackRef = useRef<HTMLDivElement>(null);
-  const isPausedRef = useRef(false);
-  const posRef = useRef(0);
-  const rafRef = useRef<number>(0);
+  const track = useRef<HTMLUListElement>(null);
+  const reduced = useReducedMotion();
 
-  useEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
-    const speed = 0.6;
-
-    const animate = () => {
-      if (!isPausedRef.current) {
-        posRef.current -= speed;
-        const half = track.scrollWidth / 2;
-        if (Math.abs(posRef.current) >= half) posRef.current = 0;
-        track.style.transform = `translateX(${posRef.current}px)`;
-      }
-      rafRef.current = requestAnimationFrame(animate);
-    };
-
-    rafRef.current = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(rafRef.current);
-  }, []);
-
-  const doubled = [...trending, ...trending];
+  const scrollBy = (dir: 1 | -1) => {
+    const el = track.current;
+    if (!el) return;
+    el.scrollBy({ left: dir * (el.clientWidth * 0.8), behavior: reduced ? 'auto' : 'smooth' });
+  };
 
   return (
-    <section
-      id="trending"
-      className="section-rhythm"
-      style={{ backgroundColor: 'var(--color-surface-soft)', overflow: 'hidden' }}
-    >
-      <div className="container-petale" style={{ marginBottom: '40px' }}>
-        <div style={{ textAlign: 'center' }}>
-          <p className="section-label" style={{ marginBottom: '12px' }}>Trending</p>
-          <h2 className="display-md">Trending Bulan Ini</h2>
-        </div>
-      </div>
+    <section id="trending" className="section-rhythm trending-section scallop-b scallop-t" style={{ '--edge': 'var(--color-blush)' } as React.CSSProperties}>
+      <div className="container-petale">
 
-      {/* Carousel */}
-      <div
-        style={{ overflow: 'hidden', cursor: 'grab' }}
-        onMouseEnter={() => { isPausedRef.current = true; }}
-        onMouseLeave={() => { isPausedRef.current = false; }}
-      >
-        <div
-          ref={trackRef}
-          style={{ display: 'flex', gap: '16px', width: 'max-content', paddingInline: '24px' }}
-        >
-          {doubled.map((item, i) => (
-            <div
-              key={`${item.id}-${i}`}
-              style={{
-                flexShrink: 0,
-                width: '240px',
-                borderRadius: '20px',
-                overflow: 'hidden',
-                backgroundColor: 'var(--color-canvas)',
-                boxShadow: 'var(--shadow-card)',
-                position: 'relative',
-              }}
+        <div className="trending-head">
+          <div className="section-head">
+            <h2 className="display-lg">Lagi Viral Bulan Ini</h2>
+            <p className="lede">Delapan desain yang lagi kami suka bulan ini (urutannya contoh saja). Sekali tap, langsung pesan.</p>
+          </div>
+          <div className="trending-nav">
+            <button type="button" className="round-btn" onClick={() => scrollBy(-1)} aria-label="Geser ke kiri"><ArrowLeft size={20} weight="bold" /></button>
+            <button type="button" className="round-btn" onClick={() => scrollBy(1)} aria-label="Geser ke kanan"><ArrowRight size={20} weight="bold" /></button>
+          </div>
+        </div>
+
+        <ul className="trending-track" ref={track} aria-label="Desain trending">
+          {trending.map((t, i) => (
+            <motion.li
+              key={t.name}
+              className="trend-card"
+              data-flavor={t.flavor}
+              initial={reduced ? false : { opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '0px 0px -10% 0px' }}
+              transition={{ type: 'spring', stiffness: 260, damping: 22, delay: Math.min(i, 3) * 0.08 }}
+              whileHover={reduced ? undefined : { y: -8, rotate: i % 2 ? 1.2 : -1.2 }}
             >
-              <div style={{ aspectRatio: '3/4', position: 'relative' }}>
-                <img
-                  src={item.src}
-                  alt={item.name}
-                  loading="lazy"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                />
-                {/* Trending pulse tag */}
-                <motion.div
-                  animate={{ scale: [1, 1.08, 1] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-                  style={{
-                    position: 'absolute',
-                    top: '12px',
-                    left: '12px',
-                    backgroundColor: 'var(--color-rose)',
-                    color: '#fff',
-                    fontSize: '10px',
-                    fontWeight: 700,
-                    letterSpacing: '1px',
-                    textTransform: 'uppercase',
-                    padding: '3px 10px',
-                    borderRadius: '9999px',
-                  }}
-                >
-                  Trending
-                </motion.div>
+              <div className="trend-photo photo-frame">
+                <img {...imgProps(t.photo, 300, 400)} />
+                <span className="sticker trend-rank" style={{ '--sticker': 'var(--flavor)', '--r': '-8deg' } as React.CSSProperties}>
+                  {t.rank <= 3 ? <Fire size={14} weight="fill" /> : null} #{t.rank}
+                </span>
               </div>
-
-              <div style={{ padding: '16px' }}>
-                <p style={{ fontWeight: 600, fontSize: '14px', color: 'var(--color-ink)', marginBottom: '2px' }}>
-                  {item.name}
-                </p>
-                <p style={{ fontSize: '12px', color: 'var(--color-rose)', fontWeight: 500, marginBottom: '12px' }}>
-                  {item.tag}
-                </p>
-                <a
-                  href="#booking"
-                  style={{
-                    display: 'block',
-                    textAlign: 'center',
-                    padding: '8px 0',
-                    borderRadius: '9999px',
-                    backgroundColor: 'var(--color-rose-light)',
-                    color: 'var(--color-rose-deep)',
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    textDecoration: 'none',
-                    transition: 'background-color 0.2s',
-                  }}
-                  onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'var(--color-rose)')}
-                  onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'var(--color-rose-light)')}
-                  onClick={e => (e.currentTarget.style.color = '#fff')}
-                >
-                  Quick Book
-                </a>
-              </div>
-            </div>
+              <h3 className="trend-name">{t.name}</h3>
+              <p className="trend-tag">{t.tag}</p>
+              <a href="#booking" className="btn-primary trend-cta">Pesan</a>
+            </motion.li>
           ))}
-        </div>
+        </ul>
+
       </div>
     </section>
   );

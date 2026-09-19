@@ -1,239 +1,159 @@
-import { motion, useReducedMotion, type Variants } from 'framer-motion';
-import { FlowerLotus, Sparkle, Star, PaintBrush } from '@phosphor-icons/react';
+import { useEffect, useState } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { Sparkle, ArrowRight, CheckCircle, FlowerLotus, Camera, ShieldCheck, WhatsappLogo } from '@phosphor-icons/react';
+import { imgProps, type PhotoKey } from '../../data/photos';
 
-type PetalType = 'flower' | 'sparkle' | 'star';
-
-const petals: { type: PetalType; x: string; y: string; delay: number; size: number }[] = [
-  { type: 'flower',  x: '8%',  y: '18%', delay: 0,   size: 26 },
-  { type: 'sparkle', x: '90%', y: '12%', delay: 1.2, size: 20 },
-  { type: 'flower',  x: '5%',  y: '72%', delay: 2.1, size: 18 },
-  { type: 'star',    x: '85%', y: '65%', delay: 0.7, size: 14 },
-  { type: 'sparkle', x: '72%', y: '25%', delay: 1.8, size: 16 },
-  { type: 'flower',  x: '18%', y: '85%', delay: 0.4, size: 14 },
-  { type: 'star',    x: '55%', y: '8%',  delay: 2.5, size: 12 },
-  { type: 'sparkle', x: '92%', y: '80%', delay: 1.5, size: 15 },
+const flavors: { id: string; label: string; photo: PhotoKey; caption: string }[] = [
+  { id: 'strawberry', label: 'Strawberry Milk', photo: 'heartsPink',  caption: 'Heart French' },
+  { id: 'taro',       label: 'Taro Latte',      photo: 'lilacPastel', caption: 'Lilac Pastel' },
+  { id: 'matcha',     label: 'Matcha Mint',     photo: 'pastelMuted', caption: 'Sage Milk' },
+  { id: 'mango',      label: 'Mango Pop',       photo: 'yellowTips',  caption: 'Sunny Tips' },
 ];
 
-const PetalIcon = ({ type, size }: { type: PetalType; size: number }) => {
-  const props = { size, weight: 'thin' as const, color: 'var(--color-rose)' };
-  if (type === 'sparkle') return <Sparkle {...props} />;
-  if (type === 'star')    return <Star {...props} />;
-  return <FlowerLotus {...props} />;
-};
+const menuTicker = ['Gel Polish', 'French Tip', 'Chrome', '3D Art', 'Bridal', 'Acrylic', 'BIAB', 'Spa Pedicure', 'Custom Design'];
 
-const cuteReveal: Variants = {
-  hidden: { opacity: 0, scale: 0.92, y: 24 },
-  visible: (i: number) => ({
-    opacity: 1, scale: 1, y: 0,
-    transition: { type: 'spring', stiffness: 180, damping: 18, delay: i * 0.1 },
-  }),
-};
-
-const badges = [
-  { icon: <Sparkle size={14} weight="fill" color="var(--color-rose)" />,    text: 'Reviewed by Vogue ID' },
-  { icon: <PaintBrush size={14} weight="regular" color="var(--color-rose)" />, text: '1.000+ Designs Done' },
-  { icon: <Star size={14} weight="fill" color="var(--color-rose)" />,        text: '4.9 Google Rating' },
+const points = [
+  { Icon: Camera,      text: 'Bawa screenshot, kami recreate' },
+  { Icon: ShieldCheck, text: 'Alat steril untuk tiap klien' },
+  { Icon: WhatsappLogo, text: 'Booking cepat via WhatsApp' },
 ];
 
-export default function Hero() {
-  const reduced = useReducedMotion();
-
+function BounceLine({ text, delay, reduced }: { text: string; delay: number; reduced: boolean }) {
   return (
-    <section
-      style={{
-        position: 'relative',
-        minHeight: '100svh',
-        display: 'flex',
-        alignItems: 'center',
-        backgroundColor: 'var(--color-canvas)',
-        overflow: 'hidden',
-        paddingTop: '72px',
-      }}
-    >
-      {/* Floating petal particles */}
-      {!reduced && petals.map((p, i) => (
-        <motion.span
-          key={i}
-          aria-hidden="true"
-          style={{
-            position: 'absolute',
-            left: p.x,
-            top: p.y,
-            opacity: 0.3,
-            pointerEvents: 'none',
-            userSelect: 'none',
-          }}
-          animate={{ y: [0, -28, 0], x: [0, 12, 0], rotate: [0, 360] }}
-          transition={{ duration: 8 + i * 0.6, repeat: Infinity, delay: p.delay, ease: 'easeInOut' }}
-        >
-          <PetalIcon type={p.type} size={p.size} />
-        </motion.span>
-      ))}
-
-      {/* Soft blush blob */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          top: '-10%',
-          right: '-5%',
-          width: '55%',
-          aspectRatio: '1',
-          background: 'radial-gradient(circle, rgba(201,107,138,0.10) 0%, transparent 70%)',
-          pointerEvents: 'none',
-        }}
-      />
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          bottom: '-5%',
-          left: '-8%',
-          width: '40%',
-          aspectRatio: '1',
-          background: 'radial-gradient(circle, rgba(201,107,138,0.07) 0%, transparent 70%)',
-          pointerEvents: 'none',
-        }}
-      />
-
-      <div className="container-petale" style={{ width: '100%', paddingBlock: '80px 96px' }}>
-        <div style={{ maxWidth: '720px', marginInline: 'auto', textAlign: 'center' }}>
-
-          {/* Eye-brow label */}
-          <motion.div
-            custom={0} variants={cuteReveal} initial="hidden" animate="visible"
-            style={{ marginBottom: '24px' }}
+    <span className="bounce-line" aria-hidden="true">
+      {[...text].map((ch, i) =>
+        ch === ' ' ? (
+          <span key={i} className="bounce-space" />
+        ) : (
+          <motion.span
+            key={i}
+            className="bounce-ch"
+            initial={reduced ? false : { y: '0.9em', scale: 0.5, opacity: 0, rotate: i % 2 ? 9 : -9 }}
+            animate={{ y: 0, scale: 1, opacity: 1, rotate: 0 }}
+            transition={{ type: 'spring', stiffness: 380, damping: 11, delay: delay + i * 0.045 }}
+            whileHover={reduced ? undefined : { y: '-0.12em', rotate: i % 2 ? -6 : 6, scale: 1.08, transition: { type: 'spring', stiffness: 500, damping: 12 } }}
           >
-            <span className="badge badge-rose" style={{ fontSize: '12px', letterSpacing: '1.5px' }}>
-              ✿ Premium Nail Art Studio
-            </span>
-          </motion.div>
-
-          {/* Headline */}
-          <motion.h1
-            className="display-xl"
-            custom={1} variants={cuteReveal} initial="hidden" animate="visible"
-            style={{ marginBottom: '24px', fontStyle: 'italic' }}
-          >
-            Kuku Cantik,{' '}
-            <span style={{ color: 'var(--color-rose)' }}>Mood Naik.</span>
-          </motion.h1>
-
-          {/* Sub-headline */}
-          <motion.p
-            custom={2} variants={cuteReveal} initial="hidden" animate="visible"
-            style={{
-              fontSize: '18px',
-              lineHeight: '1.65',
-              color: 'var(--color-muted)',
-              marginBottom: '40px',
-              maxWidth: '580px',
-              marginInline: 'auto',
-            }}
-          >
-            Nail art studio dengan 500+ desain ready, gel polish premium, dan standar
-            hygiene rumah sakit. Karena detail kecil bikin perbedaan besar.
-          </motion.p>
-
-          {/* CTAs */}
-          <motion.div
-            custom={3} variants={cuteReveal} initial="hidden" animate="visible"
-            style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '56px' }}
-          >
-            <a href="#catalog" className="btn-primary" style={{ fontSize: '15px', padding: '16px 32px' }}>
-              Lihat Desain
-            </a>
-            <a href="#booking" className="btn-secondary" style={{ fontSize: '15px', padding: '16px 32px' }}>
-              Book Sekarang
-            </a>
-          </motion.div>
-
-          {/* Social proof badges */}
-          <motion.div
-            custom={4} variants={cuteReveal} initial="hidden" animate="visible"
-            style={{
-              display: 'flex',
-              gap: '8px',
-              justifyContent: 'center',
-              flexWrap: 'wrap',
-            }}
-          >
-            {badges.map((b) => (
-              <div
-                key={b.text}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  padding: '8px 16px',
-                  borderRadius: '9999px',
-                  backgroundColor: 'var(--color-surface-card)',
-                  border: '1px solid var(--color-hairline)',
-                  fontSize: '13px',
-                  fontWeight: 500,
-                  color: 'var(--color-body-strong)',
-                }}
-              >
-                {b.icon}
-                {b.text}
-              </div>
-            ))}
-          </motion.div>
-
-        </div>
-
-        {/* Hero image strip */}
-        <motion.div
-          custom={5} variants={cuteReveal} initial="hidden" animate="visible"
-          style={{ marginTop: '64px' }}
-        >
-          <HeroImageStrip />
-        </motion.div>
-      </div>
-    </section>
+            {ch}
+          </motion.span>
+        )
+      )}
+    </span>
   );
 }
 
-function HeroImageStrip() {
-  const images = [
-    { src: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80', alt: 'Nail art floral detail', aspect: '3/4' },
-    { src: 'https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=600&q=80&crop=top', alt: 'Gel polish application', aspect: '3/4' },
-    { src: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80&crop=entropy', alt: 'Minimalist nail art elegant', aspect: '3/4' },
-    { src: 'https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=600&q=80&crop=bottom', alt: 'Chrome nails detail', aspect: '3/4' },
-    { src: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=800&q=80&crop=center', alt: 'Nail studio ambiance', aspect: '16/9' },
-  ];
+export default function Hero() {
+  const reducedPref = useReducedMotion();
+  const reduced = !!reducedPref;
+  const [flavor, setFlavor] = useState(flavors[0]);
+
+  // the picked flavor re-tints menu board, tabs and awning too (they inherit from <html>)
+  useEffect(() => { document.documentElement.dataset.flavor = flavor.id; }, [flavor]);
 
   return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(5, 1fr)',
-        gap: '10px',
-        maxWidth: '1000px',
-        marginInline: 'auto',
-      }}
-    >
-      {images.map((img, i) => (
-        <motion.div
-          key={i}
-          whileHover={{ scale: 1.03, zIndex: 1 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-          style={{
-            borderRadius: i === 4 ? '16px' : '12px',
-            overflow: 'hidden',
-            aspectRatio: img.aspect,
-            boxShadow: 'var(--shadow-card)',
-            gridColumn: i === 4 ? 'span 2' : 'span 1',
-          }}
-        >
-          <img
-            src={img.src}
-            alt={img.alt}
-            loading={i === 0 ? 'eager' : 'lazy'}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-          />
-        </motion.div>
-      ))}
-    </div>
+    <section id="top" className="hero pearls" data-flavor={flavor.id}>
+      <div className="container-petale hero-grid">
+
+        <div className="hero-copy">
+          <h1 className="display-xl hero-title" aria-label="Kuku Lucu, Hati Happy.">
+            <BounceLine text="Kuku Lucu," delay={0.1} reduced={reduced} />
+            <span className="hero-hl">
+              <BounceLine text="Hati Happy." delay={0.55} reduced={reduced} />
+            </span>
+          </h1>
+
+          <p className="lede hero-lede">
+            Studio nail art dengan ratusan desain siap pakai. Pilih rasa favoritmu, atau bawa screenshot Pinterest-mu, biar kami yang bikin kukumu jadi lucu.
+          </p>
+
+          <div className="flavor-picker" role="radiogroup" aria-label="Pilih rasa mood-mu">
+            <span className="flavor-label">Pilih rasa mood-mu</span>
+            <div className="flavor-dots">
+              {flavors.map(f => (
+                <motion.button
+                  key={f.id}
+                  type="button"
+                  role="radio"
+                  aria-checked={flavor.id === f.id}
+                  aria-label={f.label}
+                  title={f.label}
+                  data-flavor={f.id}
+                  className="flavor-dot"
+                  onClick={() => setFlavor(f)}
+                  whileTap={{ scale: 0.8 }}
+                  animate={{ scale: flavor.id === f.id ? 1.18 : 1 }}
+                  transition={{ type: 'spring', stiffness: 500, damping: 14 }}
+                />
+              ))}
+            </div>
+            <span className="flavor-name" aria-live="polite">{flavor.label}</span>
+          </div>
+
+          <div className="hero-actions">
+            <a href="#booking" className="btn-primary"><Sparkle size={16} weight="fill" /> Pesan Slot</a>
+            <a href="#services" className="btn-secondary">Intip Menu <ArrowRight size={16} weight="bold" /></a>
+          </div>
+
+          <ul className="hero-points">
+            {points.map(({ Icon, text }) => (
+              <li key={text}><Icon size={18} weight="fill" /> {text}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="hero-collage">
+          <div className="hero-arch photo-frame arch">
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={flavor.id}
+                {...imgProps(flavor.photo, 560, 700, true)}
+                initial={reduced ? false : { scale: 1.12, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ opacity: 0, scale: 0.96 }}
+                transition={{ type: 'spring', stiffness: 240, damping: 22 }}
+              />
+            </AnimatePresence>
+          </div>
+          <span className="sticker hero-cap" style={{ '--sticker': 'var(--flavor)', '--r': '-5deg' } as React.CSSProperties}>
+            <CheckCircle size={15} weight="fill" /> {flavor.caption}
+          </span>
+
+          <div className="hero-bubble photo-frame">
+            <img {...imgProps('pastelSmoothie', 240, 240, true)} />
+          </div>
+          <div className="hero-tile photo-frame">
+            <img {...imgProps('stiletto3d', 260, 260, true)} />
+          </div>
+          <span className="sticker hero-tag" style={{ '--sticker': 'var(--color-mango)', '--r': '6deg' } as React.CSSProperties}>
+            <Sparkle size={14} weight="fill" /> 3D Art
+          </span>
+
+          <div className="hero-spin" aria-hidden="true">
+            <svg viewBox="0 0 120 120">
+              <defs>
+                <path id="hero-circle" d="M60,60 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0" />
+              </defs>
+              <text>
+                <textPath href="#hero-circle" textLength="278" lengthAdjust="spacing">PETALÉ NAIL STUDIO • KUKU LUCU • </textPath>
+              </text>
+            </svg>
+            <FlowerLotus size={24} weight="bold" className="hero-spin-icon" />
+          </div>
+        </div>
+      </div>
+
+      <div className="awning" aria-hidden="true">
+        <div className="awning-clip">
+          <div className="awning-track">
+            {[0, 1].map(k => (
+              <div className="awning-set" key={k}>
+                {menuTicker.map(t => (
+                  <span key={t + k}>{t}<Sparkle size={14} weight="fill" /></span>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }

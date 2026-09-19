@@ -1,177 +1,125 @@
 import { useState } from 'react';
-import { motion, AnimatePresence, type Variants } from 'framer-motion';
-import { PaintBrush, Footprints, Palette, Sparkle } from '@phosphor-icons/react';
+import { motion, AnimatePresence, useReducedMotion, type Variants } from 'framer-motion';
+import { PaintBrush, Footprints, Palette, Clock } from '@phosphor-icons/react';
+import { imgProps, type PhotoKey } from '../../data/photos';
 
 type Tab = 'manicure' | 'pedicure' | 'nailart';
 
-const ICO = { size: 32, weight: 'light' as const, color: 'var(--color-rose)' };
+const tabs: { id: Tab; label: string; Icon: typeof PaintBrush; photo: PhotoKey; sticker: string }[] = [
+  { id: 'manicure', label: 'Manicure', Icon: PaintBrush, photo: 'pastelMuted', sticker: 'Paling laris' },
+  { id: 'pedicure', label: 'Pedicure', Icon: Footprints, photo: 'mintToes',    sticker: 'Kaki happy' },
+  { id: 'nailart',  label: 'Nail Art', Icon: Palette,    photo: 'stiletto3d',  sticker: 'Bebas request' },
+];
 
-const services = {
+const menu: Record<Tab, { name: string; price: string; duration: string; desc: string }[]> = {
   manicure: [
-    { icon: <PaintBrush {...ICO} />, name: 'Basic Manicure',       price: 'Rp 95k',     duration: '45 min',      desc: 'Cuticle care, shape & polish' },
-    { icon: <PaintBrush {...ICO} />, name: 'Gel Polish Manicure',  price: 'Rp 150k',    duration: '60 min',      desc: 'Long-lasting gel finish' },
-    { icon: <PaintBrush {...ICO} />, name: 'Acrylic Extension',    price: 'Rp 350k',    duration: '120 min',     desc: 'Custom length & shape' },
-    { icon: <PaintBrush {...ICO} />, name: 'BIAB / Builder Gel',   price: 'Rp 250k',    duration: '90 min',      desc: 'Strengthening overlay' },
+    { name: 'Basic Manicure',      price: 'Rp 95k',  duration: '45 min',  desc: 'Cuticle care, shape & polish' },
+    { name: 'Gel Polish Manicure', price: 'Rp 150k', duration: '60 min',  desc: 'Warna awet dengan finish glossy' },
+    { name: 'Acrylic Extension',   price: 'Rp 350k', duration: '120 min', desc: 'Panjang dan bentuk sesuai maumu' },
+    { name: 'BIAB / Builder Gel',  price: 'Rp 250k', duration: '90 min',  desc: 'Lapisan penguat untuk kuku rapuh' },
   ],
   pedicure: [
-    { icon: <Footprints {...ICO} />, name: 'Basic Pedicure',       price: 'Rp 125k',    duration: '60 min',      desc: 'Cuticle care, shape & polish' },
-    { icon: <Footprints {...ICO} />, name: 'Spa Pedicure',         price: 'Rp 195k',    duration: '90 min',      desc: 'Foot soak, scrub & massage' },
-    { icon: <Footprints {...ICO} />, name: 'Gel Pedicure',         price: 'Rp 175k',    duration: '75 min',      desc: 'Long-lasting gel on feet' },
+    { name: 'Basic Pedicure', price: 'Rp 125k', duration: '60 min', desc: 'Cuticle care, shape & polish' },
+    { name: 'Spa Pedicure',   price: 'Rp 195k', duration: '90 min', desc: 'Rendam, scrub & pijat kaki' },
+    { name: 'Gel Pedicure',   price: 'Rp 175k', duration: '75 min', desc: 'Gel awet untuk kuku kaki' },
   ],
   nailart: [
-    { icon: <Palette {...ICO} />,    name: 'Simple Art',           price: '+Rp 25k',    duration: 'per kuku',    desc: '1-3 accent nails, minimal designs' },
-    { icon: <Palette {...ICO} />,    name: 'Detailed Art',         price: '+Rp 50k',    duration: 'per kuku',    desc: 'Intricate patterns & details' },
-    { icon: <Palette {...ICO} />,    name: '3D / Chrome / Foil',   price: '+Rp 75k',    duration: 'per kuku',    desc: 'Dimensional & metallic effects' },
-    { icon: <Palette {...ICO} />,    name: 'Full Custom Design',   price: 'Konsultasi', duration: 'Sesuai desain', desc: 'Bawa referensi, kami wujudkan' },
+    { name: 'Simple Art',         price: '+Rp 25k',    duration: 'per kuku',      desc: '1-3 kuku aksen, desain minimalis' },
+    { name: 'Detailed Art',       price: '+Rp 50k',    duration: 'per kuku',      desc: 'Pola rumit dan detail halus' },
+    { name: '3D / Chrome / Foil', price: '+Rp 75k',    duration: 'per kuku',      desc: 'Efek dimensi dan metalik' },
+    { name: 'Full Custom Design', price: 'Konsultasi', duration: 'sesuai desain', desc: 'Bawa referensi, kami wujudkan' },
   ],
 };
 
-const tabs: { id: Tab; label: string }[] = [
-  { id: 'manicure', label: 'Manicure' },
-  { id: 'pedicure', label: 'Pedicure' },
-  { id: 'nailart',  label: 'Nail Art' },
-];
-
-const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 28, scale: 0.96 },
+const rowVariants: Variants = {
+  hidden: { opacity: 0, x: -16 },
   visible: (i: number) => ({
-    opacity: 1, y: 0, scale: 1,
-    transition: { delay: i * 0.08, duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+    opacity: 1, x: 0,
+    transition: { type: 'spring', stiffness: 300, damping: 22, delay: i * 0.06 },
   }),
 };
 
 export default function Services() {
   const [active, setActive] = useState<Tab>('manicure');
+  const reduced = useReducedMotion();
+  const tab = tabs.find(t => t.id === active)!;
 
   return (
-    <section id="services" className="section-rhythm" style={{ backgroundColor: 'var(--color-surface-soft)' }}>
+    <section id="services" className="section-rhythm menu-section">
       <div className="container-petale">
 
-        {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-          <p className="section-label" style={{ marginBottom: '12px' }}>Services</p>
-          <h2 className="display-md" style={{ marginBottom: '16px' }}>
-            Pilih Yang Cocok Hari Ini
-          </h2>
-          <p style={{ color: 'var(--color-muted)', maxWidth: '480px', marginInline: 'auto', lineHeight: '1.65' }}>
-            Semua sudah include cuticle care & basic shaping. Pilih warna polos atau ajak nail artist kami berkarya.
-          </p>
+        <div className="section-head">
+          <h2 className="display-lg">Menu Petalé</h2>
+          <p className="lede">Semua sudah termasuk cuticle care & basic shaping. Pilih warna polos, atau ajak nail artist kami berkarya.</p>
         </div>
 
-        {/* Tabs with layoutId indicator */}
-        <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', marginBottom: '48px' }}>
-          {tabs.map((tab) => (
+        <div className="menu-tabs" role="tablist" aria-label="Kategori layanan">
+          {tabs.map(t => (
             <button
-              key={tab.id}
-              onClick={() => setActive(tab.id)}
-              style={{
-                position: 'relative',
-                padding: '10px 24px',
-                borderRadius: '9999px',
-                border: 'none',
-                cursor: 'pointer',
-                fontFamily: 'var(--font-body)',
-                fontSize: '14px',
-                fontWeight: 500,
-                color: active === tab.id ? 'var(--color-ink)' : 'var(--color-muted)',
-                backgroundColor: 'transparent',
-                transition: 'color 0.2s',
-              }}
+              key={t.id}
+              role="tab"
+              id={`tab-${t.id}`}
+              aria-selected={active === t.id}
+              aria-controls="menu-panel"
+              className="menu-tab"
+              onClick={() => setActive(t.id)}
             >
-              {active === tab.id && (
-                <motion.span
-                  layoutId="tab-indicator"
-                  style={{
-                    position: 'absolute',
-                    inset: 0,
-                    borderRadius: '9999px',
-                    backgroundColor: 'var(--color-canvas)',
-                    boxShadow: 'var(--shadow-card)',
-                  }}
-                  transition={{ type: 'spring', stiffness: 300, damping: 28 }}
-                />
+              {active === t.id && (
+                <motion.span layoutId="menu-tab-pill" className="menu-tab-pill" transition={{ type: 'spring', stiffness: 420, damping: 30 }} />
               )}
-              <span style={{ position: 'relative', zIndex: 1 }}>{tab.label}</span>
+              <span className="menu-tab-label"><t.Icon size={18} weight="bold" /> {t.label}</span>
             </button>
           ))}
         </div>
 
-        {/* Service cards */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={active}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
-              gap: '16px',
-            }}
-          >
-            {services[active].map((svc, i) => (
+        <div className="menu-board" id="menu-panel" role="tabpanel" aria-labelledby={`tab-${active}`}>
+          <div className="menu-photo-wrap">
+            <AnimatePresence mode="wait">
               <motion.div
-                key={svc.name}
-                custom={i}
-                variants={cardVariants}
-                initial="hidden"
-                animate="visible"
-                whileHover={{ y: -4, boxShadow: 'var(--shadow-hover)' }}
-                transition={{ duration: 0.25 }}
-                style={{
-                  backgroundColor: 'var(--color-canvas)',
-                  borderRadius: 'var(--radius-md)',
-                  padding: '28px',
-                  boxShadow: 'var(--shadow-card)',
-                  border: '1px solid var(--color-hairline-soft)',
-                  cursor: 'default',
-                }}
+                key={tab.id}
+                className="menu-photo photo-frame arch"
+                initial={reduced ? false : { opacity: 0, y: 24, rotate: -2 }}
+                animate={{ opacity: 1, y: 0, rotate: 0 }}
+                exit={{ opacity: 0, y: -16 }}
+                transition={{ type: 'spring', stiffness: 260, damping: 24 }}
               >
-                <div style={{ marginBottom: '16px', lineHeight: 1, display: 'flex' }}>
-                  {svc.icon}
-                </div>
-                <h3 style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: '18px',
-                  fontWeight: 400,
-                  color: 'var(--color-ink)',
-                  marginBottom: '8px',
-                  letterSpacing: '-0.2px',
-                }}>
-                  {svc.name}
-                </h3>
-                <p style={{ fontSize: '14px', color: 'var(--color-muted)', marginBottom: '20px', lineHeight: '1.5' }}>
-                  {svc.desc}
-                </p>
-                <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
-                  <span style={{
-                    fontFamily: 'var(--font-display)',
-                    fontSize: '22px',
-                    fontWeight: 500,
-                    color: 'var(--color-rose)',
-                    letterSpacing: '-0.3px',
-                  }}>
-                    {svc.price}
-                  </span>
-                  <span style={{
-                    fontSize: '12px',
-                    color: 'var(--color-muted-soft)',
-                    fontWeight: 500,
-                  }}>
-                    {svc.duration}
-                  </span>
-                </div>
+                <img {...imgProps(tab.photo, 460, 600)} />
               </motion.div>
-            ))}
-          </motion.div>
-        </AnimatePresence>
+            </AnimatePresence>
+            <span className="sticker menu-sticker" style={{ '--sticker': 'var(--flavor)', '--r': '-6deg' } as React.CSSProperties}>{tab.sticker}</span>
+          </div>
 
-        {/* Bottom CTA */}
-        <div style={{ textAlign: 'center', marginTop: '48px' }}>
-          <a href="#booking" className="btn-primary">
-            <Sparkle size={14} weight="fill" /> Book Sekarang
-          </a>
+          <AnimatePresence mode="wait">
+            <motion.ul
+              key={tab.id}
+              className="menu-list"
+              initial="hidden"
+              animate="visible"
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
+            >
+              {menu[tab.id].map((item, i) => (
+                <motion.li
+                  key={item.name}
+                  className="menu-row"
+                  variants={rowVariants}
+                  custom={i}
+                  whileHover={reduced ? undefined : { x: 6, rotate: -0.6 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 18 }}
+                >
+                  <div className="menu-line">
+                    <span className="menu-name">{item.name}</span>
+                    <span className="menu-dots" aria-hidden="true" />
+                    <span className="menu-price">{item.price}</span>
+                  </div>
+                  <p className="menu-desc">
+                    {item.desc}
+                    <span className="menu-time"><Clock size={14} weight="bold" /> {item.duration}</span>
+                  </p>
+                </motion.li>
+              ))}
+            </motion.ul>
+          </AnimatePresence>
         </div>
 
       </div>

@@ -1,6 +1,7 @@
-import { useState, useRef } from 'react';
-import { motion, AnimatePresence, useInView } from 'framer-motion';
-import { Confetti, Sparkle } from '@phosphor-icons/react';
+import { useState, useId } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { Confetti, Sparkle, ArrowRight, ArrowLeft, CaretDown } from '@phosphor-icons/react';
+import { imgProps } from '../../data/photos';
 
 type Step = 1 | 2 | 3;
 
@@ -21,14 +22,14 @@ interface FormData {
   phone: string;
 }
 
+const empty: FormData = { branch: '', service: '', date: '', artist: '', name: '', phone: '' };
+
 export default function BookCTA() {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: '-10%' });
+  const reduced = useReducedMotion();
+  const uid = useId();
   const [step, setStep] = useState<Step>(1);
   const [submitted, setSubmitted] = useState(false);
-  const [form, setForm] = useState<FormData>({
-    branch: '', service: '', date: '', artist: '', name: '', phone: '',
-  });
+  const [form, setForm] = useState<FormData>(empty);
 
   const update = (field: keyof FormData, value: string) =>
     setForm(prev => ({ ...prev, [field]: value }));
@@ -51,248 +52,166 @@ export default function BookCTA() {
     window.open(`https://wa.me/6281200010001?text=${msg}`, '_blank');
     setSubmitted(true);
 
-    // Confetti
     try {
       const confetti = (await import('canvas-confetti')).default;
       confetti({
-        particleCount: 120,
-        spread: 80,
-        colors: ['#c96b8a', '#f7e2ec', '#faf9f5', '#ad5474', '#efe9de'],
+        particleCount: 140,
+        spread: 90,
+        colors: ['#f2789f', '#c9b6f2', '#a9ddb8', '#ffcf5c', '#ffdde8', '#4a2333'],
         origin: { y: 0.6 },
+        disableForReducedMotion: true,
       });
     } catch {
       // silently fail if confetti unavailable
     }
   };
 
-  const slideVariants = {
-    enter: { opacity: 0, x: 40 },
+  const slide = {
+    enter:  { opacity: 0, x: reduced ? 0 : 40 },
     center: { opacity: 1, x: 0 },
-    exit:  { opacity: 0, x: -40 },
+    exit:   { opacity: 0, x: reduced ? 0 : -40 },
   };
 
   return (
-    <section
-      id="booking"
-      className="section-rhythm"
-      style={{ backgroundColor: 'var(--color-surface-dark)' }}
-    >
-      <div className="container-petale" ref={ref}>
-        <div style={{ maxWidth: '560px', marginInline: 'auto' }}>
+    <section id="booking" className="section-rhythm book-section pearls" data-flavor="strawberry" style={{ '--surface': 'var(--color-blush)' } as React.CSSProperties}>
+      <div className="container-petale book-grid">
 
-          {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
-            style={{ textAlign: 'center', marginBottom: '48px' }}
-          >
-            <p style={{
-              fontSize: '12px', fontWeight: 500, letterSpacing: '2px',
-              textTransform: 'uppercase', color: 'var(--color-rose)', marginBottom: '12px',
-            }}>
-              Booking
-            </p>
-            <h2 className="display-md" style={{ color: 'var(--color-on-dark)', marginBottom: '12px' }}>
-              Slot Cepat Habis,<br />Book Dulu Yuk!
-            </h2>
-            <p style={{ color: 'var(--color-on-dark-soft)', fontSize: '15px' }}>
-              Isi form di bawah, kami follow up via WhatsApp.
-            </p>
-          </motion.div>
+        <div className="book-visual">
+          <div className="book-photo photo-frame arch"><img {...imgProps('milkOmbre', 460, 600)} /></div>
+          <div className="book-bottles photo-frame"><img {...imgProps('dripBottles', 200, 200)} /></div>
+          <span className="sticker book-sticker" style={{ '--sticker': 'var(--color-mango)', '--r': '-7deg' } as React.CSSProperties}>
+            <Sparkle size={14} weight="fill" /> Slot cepat habis!
+          </span>
+        </div>
 
-          {/* Step indicator */}
+        <div className="book-main">
+          <div className="section-head">
+            <h2 className="display-lg">Slot Cepat Habis, Book Dulu Yuk!</h2>
+            <p className="lede">Isi tiga langkah kecil ini, kami lanjut konfirmasi lewat WhatsApp.</p>
+          </div>
+
           {!submitted && (
-            <div style={{ display: 'flex', gap: '8px', marginBottom: '32px', justifyContent: 'center' }}>
+            <div className="pearl-steps" role="img" aria-label={`Langkah ${step} dari 3`}>
               {([1, 2, 3] as Step[]).map(s => (
-                <div
+                <motion.span
                   key={s}
-                  style={{
-                    height: '4px',
-                    flex: 1,
-                    borderRadius: '9999px',
-                    backgroundColor: step >= s ? 'var(--color-rose)' : 'rgba(255,255,255,0.12)',
-                    transition: 'background-color 0.3s',
-                  }}
+                  className={`pearl${step >= s ? ' filled' : ''}`}
+                  animate={{ scale: step === s ? 1.25 : 1 }}
+                  transition={{ type: 'spring', stiffness: 500, damping: 14 }}
                 />
               ))}
+              <span className="pearl-text">Langkah {step} / 3</span>
             </div>
           )}
 
-          {/* Form card */}
-          <motion.div
-            initial={{ opacity: 0, y: 32 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.2, duration: 0.6 }}
-            style={{
-              backgroundColor: 'var(--color-canvas)',
-              borderRadius: '24px',
-              padding: '36px',
-              boxShadow: 'var(--shadow-modal)',
-            }}
-          >
+          <div className="order-slip">
             <AnimatePresence mode="wait">
               {submitted ? (
                 <motion.div
                   key="success"
-                  initial={{ opacity: 0, scale: 0.9 }}
+                  className="slip-success"
+                  initial={{ opacity: 0, scale: 0.85 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  style={{ textAlign: 'center', padding: '16px 0' }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 16 }}
                 >
-                  <div style={{ marginBottom: '16px', color: 'var(--color-rose)' }}>
-                    <Confetti size={56} weight="light" />
-                  </div>
-                  <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '24px', fontWeight: 400, marginBottom: '8px' }}>
-                    Yeay, hampir selesai!
-                  </h3>
-                  <p style={{ color: 'var(--color-muted)', marginBottom: '24px' }}>
-                    Cek WhatsApp kamu — tim Petalé akan segera konfirmasi slot-mu.
-                  </p>
-                  <button className="btn-primary" onClick={() => { setSubmitted(false); setStep(1); setForm({ branch:'',service:'',date:'',artist:'',name:'',phone:'' }); }}>
-                    Book Lagi
+                  <Confetti size={64} weight="fill" color="var(--color-rose-ink)" />
+                  <h3 className="display-md">Yeay, hampir selesai!</h3>
+                  <p>Cek WhatsApp kamu. Tim Petalé akan segera konfirmasi slot-mu.</p>
+                  <button type="button" className="btn-primary" onClick={() => { setSubmitted(false); setStep(1); setForm(empty); }}>
+                    Book lagi
                   </button>
                 </motion.div>
               ) : step === 1 ? (
-                <motion.div key="step1" variants={slideVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.3 }}>
-                  <FormLabel>Pilih Cabang</FormLabel>
-                  <SelectGrid options={brands} value={form.branch} onSelect={v => update('branch', v)} />
+                <motion.div key="step1" variants={slide} initial="enter" animate="center" exit="exit" transition={{ duration: 0.25 }}>
+                  <fieldset className="field-group">
+                    <legend>Pilih cabang</legend>
+                    <OptionGrid options={branches} value={form.branch} onSelect={v => update('branch', v)} />
+                  </fieldset>
 
-                  <FormLabel style={{ marginTop: '24px' }}>Pilih Service</FormLabel>
-                  <select
-                    value={form.service}
-                    onChange={e => update('service', e.target.value)}
-                    style={selectStyle}
-                  >
-                    <option value="">Pilih service...</option>
-                    {services.map(s => <option key={s} value={s}>{s}</option>)}
-                  </select>
+                  <div className="field">
+                    <label htmlFor={`${uid}-service`}>Pilih layanan</label>
+                    <div className="select-wrap">
+                      <select id={`${uid}-service`} value={form.service} onChange={e => update('service', e.target.value)}>
+                        <option value="">Pilih layanan...</option>
+                        {services.map(s => <option key={s} value={s}>{s}</option>)}
+                      </select>
+                      <CaretDown size={18} weight="bold" className="select-caret" aria-hidden="true" />
+                    </div>
+                  </div>
 
-                  <button
-                    className="btn-primary"
-                    disabled={!canNext1}
-                    onClick={() => setStep(2)}
-                    style={{ width: '100%', justifyContent: 'center', marginTop: '24px', opacity: canNext1 ? 1 : 0.45 }}
-                  >
-                    Lanjut →
+                  <button type="button" className="btn-primary slip-btn" disabled={!canNext1} onClick={() => setStep(2)}>
+                    Lanjut <ArrowRight size={16} weight="bold" />
                   </button>
                 </motion.div>
               ) : step === 2 ? (
-                <motion.div key="step2" variants={slideVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.3 }}>
-                  <FormLabel>Pilih Tanggal</FormLabel>
-                  <input
-                    type="date"
-                    value={form.date}
-                    min={new Date().toISOString().split('T')[0]}
-                    onChange={e => update('date', e.target.value)}
-                    style={selectStyle}
-                  />
+                <motion.div key="step2" variants={slide} initial="enter" animate="center" exit="exit" transition={{ duration: 0.25 }}>
+                  <div className="field">
+                    <label htmlFor={`${uid}-date`}>Pilih tanggal</label>
+                    <input
+                      id={`${uid}-date`}
+                      type="date"
+                      value={form.date}
+                      min={new Date().toISOString().split('T')[0]}
+                      onChange={e => update('date', e.target.value)}
+                    />
+                  </div>
 
-                  <FormLabel style={{ marginTop: '24px' }}>Nail Artist (opsional)</FormLabel>
-                  <SelectGrid options={artists} value={form.artist} onSelect={v => update('artist', v)} cols={2} />
+                  <fieldset className="field-group">
+                    <legend>Nail artist (opsional)</legend>
+                    <OptionGrid options={artists} value={form.artist} onSelect={v => update('artist', v)} cols={2} />
+                  </fieldset>
 
-                  <div style={{ display: 'flex', gap: '10px', marginTop: '24px' }}>
-                    <button className="btn-secondary" onClick={() => setStep(1)} style={{ flex: 1, justifyContent: 'center' }}>
-                      ← Kembali
-                    </button>
-                    <button
-                      className="btn-primary"
-                      disabled={!canNext2}
-                      onClick={() => setStep(3)}
-                      style={{ flex: 1, justifyContent: 'center', opacity: canNext2 ? 1 : 0.45 }}
-                    >
-                      Lanjut →
-                    </button>
+                  <div className="slip-actions">
+                    <button type="button" className="btn-secondary" onClick={() => setStep(1)}><ArrowLeft size={16} weight="bold" /> Kembali</button>
+                    <button type="button" className="btn-primary" disabled={!canNext2} onClick={() => setStep(3)}>Lanjut <ArrowRight size={16} weight="bold" /></button>
                   </div>
                 </motion.div>
               ) : (
-                <motion.div key="step3" variants={slideVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.3 }}>
-                  <FormLabel>Nama Kamu</FormLabel>
-                  <input
-                    type="text"
-                    placeholder="Nama lengkap..."
-                    value={form.name}
-                    onChange={e => update('name', e.target.value)}
-                    style={selectStyle}
-                  />
-
-                  <FormLabel style={{ marginTop: '16px' }}>No. WhatsApp</FormLabel>
-                  <input
-                    type="tel"
-                    placeholder="08xxxxxxxxxx"
-                    value={form.phone}
-                    onChange={e => update('phone', e.target.value)}
-                    style={selectStyle}
-                  />
-
-                  <div style={{
-                    backgroundColor: 'var(--color-surface-card)',
-                    borderRadius: '12px',
-                    padding: '16px',
-                    marginTop: '20px',
-                    fontSize: '13px',
-                    color: 'var(--color-muted)',
-                    lineHeight: '1.6',
-                  }}>
-                    <strong style={{ color: 'var(--color-ink)' }}>Ringkasan</strong><br />
-                    {form.branch} · {form.service}<br />
-                    {form.date} · {form.artist || 'Siapa saja'}
+                <motion.div key="step3" variants={slide} initial="enter" animate="center" exit="exit" transition={{ duration: 0.25 }}>
+                  <div className="field">
+                    <label htmlFor={`${uid}-name`}>Nama kamu</label>
+                    <input id={`${uid}-name`} type="text" autoComplete="name" placeholder="Nama lengkap" value={form.name} onChange={e => update('name', e.target.value)} />
+                  </div>
+                  <div className="field">
+                    <label htmlFor={`${uid}-phone`}>No. WhatsApp</label>
+                    <input id={`${uid}-phone`} type="tel" inputMode="tel" autoComplete="tel" placeholder="08xxxxxxxxxx" value={form.phone} onChange={e => update('phone', e.target.value)} />
                   </div>
 
-                  <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
-                    <button className="btn-secondary" onClick={() => setStep(2)} style={{ flex: 1, justifyContent: 'center' }}>
-                      ← Kembali
-                    </button>
-                    <button
-                      className="btn-primary"
-                      disabled={!canSubmit}
-                      onClick={handleSubmit}
-                      style={{ flex: 2, justifyContent: 'center', opacity: canSubmit ? 1 : 0.45 }}
-                    >
-                      <Sparkle size={15} weight="fill" /> Book via WhatsApp
+                  <div className="slip-summary">
+                    <strong>Ringkasan pesanan</strong>
+                    <span>{form.branch} · {form.service}</span>
+                    <span>{form.date} · {form.artist || 'Siapa saja'}</span>
+                  </div>
+
+                  <div className="slip-actions">
+                    <button type="button" className="btn-secondary" onClick={() => setStep(2)}><ArrowLeft size={16} weight="bold" /> Kembali</button>
+                    <button type="button" className="btn-primary" disabled={!canSubmit} onClick={handleSubmit}>
+                      <Sparkle size={16} weight="fill" /> Book via WhatsApp
                     </button>
                   </div>
                 </motion.div>
               )}
             </AnimatePresence>
-          </motion.div>
-
+          </div>
         </div>
+
       </div>
     </section>
   );
 }
 
-const brands = ['Petalé Senayan', 'Petalé Kuningan', 'Petalé Surabaya'];
-
-function FormLabel({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
-  return (
-    <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-muted)', marginBottom: '8px', ...style }}>
-      {children}
-    </p>
-  );
-}
-
-function SelectGrid({ options, value, onSelect, cols = 3 }: {
+function OptionGrid({ options, value, onSelect, cols = 3 }: {
   options: string[]; value: string; onSelect: (v: string) => void; cols?: number;
 }) {
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: `repeat(${cols}, 1fr)`, gap: '8px' }}>
+    <div className="option-grid" style={{ '--cols': cols } as React.CSSProperties}>
       {options.map(opt => (
         <button
           key={opt}
+          type="button"
+          className={`option${value === opt ? ' selected' : ''}`}
+          aria-pressed={value === opt}
           onClick={() => onSelect(opt)}
-          style={{
-            padding: '10px 8px',
-            borderRadius: '10px',
-            border: `1.5px solid ${value === opt ? 'var(--color-rose)' : 'var(--color-hairline)'}`,
-            backgroundColor: value === opt ? 'var(--color-rose-light)' : 'var(--color-canvas)',
-            color: value === opt ? 'var(--color-rose-deep)' : 'var(--color-body)',
-            fontSize: '13px',
-            fontWeight: value === opt ? 600 : 400,
-            cursor: 'pointer',
-            transition: 'all 0.15s',
-            textAlign: 'center',
-          }}
         >
           {opt}
         </button>
@@ -300,16 +219,3 @@ function SelectGrid({ options, value, onSelect, cols = 3 }: {
     </div>
   );
 }
-
-const selectStyle: React.CSSProperties = {
-  width: '100%',
-  padding: '11px 14px',
-  borderRadius: '10px',
-  border: '1.5px solid var(--color-hairline)',
-  backgroundColor: 'var(--color-canvas)',
-  color: 'var(--color-ink)',
-  fontFamily: 'var(--font-body)',
-  fontSize: '14px',
-  outline: 'none',
-  cursor: 'pointer',
-};
