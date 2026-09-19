@@ -1,248 +1,233 @@
 @import "tailwindcss";
 
 /* ============================================================
-   PETALE NAIL STUDIO — HYBRID A DESIGN TOKENS
-   Claude (canvas + typography + editorial rhythm)
-   × Airbnb (rose accent + experience storytelling + CTAs)
-   × Pinterest (masonry grid + filter chips + card discovery)
+   PETALÉ — "KEDAI" DESIGN TOKENS
+   A boba-shop world: milk-cream ground, strawberry-milk rose,
+   flavor accents, cocoa-plum ink. Everything is a sticker:
+   one thick cocoa outline declares elevation; controls squish.
    ============================================================ */
 
 @theme {
-  /* ── SURFACES (from Claude) ── */
-  --color-canvas:         #faf9f5;
-  --color-surface-soft:   #f5f0e8;
-  --color-surface-card:   #efe9de;
-  --color-surface-blush:  #fdf0f5;
-  --color-surface-dark:   #181715;
-  --color-surface-dark-elevated: #252320;
-  --color-hairline:       #e6dfd8;
-  --color-hairline-soft:  #ebe6df;
+  /* ── SURFACES ── */
+  --color-milk:          #fff7f1;
+  --color-milk-deep:     #fdebe3;
+  --color-blush:         #ffdde8;
+  --color-white:         #ffffff;
 
-  /* ── ROSE ACCENT (Airbnb Rausch → shifted to feminine rose for Petalé) ── */
-  --color-rose:           #c96b8a;
-  --color-rose-deep:      #ad5474;
-  --color-rose-disabled:  #f2c4d4;
-  --color-rose-light:     #f7e2ec;
+  /* ── ROSE (primary, kept from the original brand) ── */
+  --color-rose:          #f2789f;
+  --color-rose-hover:    #ff8fb1;
+  --color-rose-ink:      #b8285f;   /* rose for small text on light grounds (5.6:1) */
 
-  /* ── TYPOGRAPHY (Claude warm ink scale) ── */
-  --color-ink:            #141413;
-  --color-body-strong:    #252523;
-  --color-body:           #3d3d3a;
-  --color-muted:          #6c6a64;
-  --color-muted-soft:     #8e8b82;
-  --color-on-primary:     #ffffff;
-  --color-on-dark:        #faf9f5;
-  --color-on-dark-soft:   #a09d96;
+  /* ── FLAVORS (accent families: solid + soft) ── */
+  --color-strawberry:      #f2789f;
+  --color-strawberry-soft: #ffdde8;
+  --color-taro:            #c9b6f2;
+  --color-taro-soft:       #ece3ff;
+  --color-taro-ink:        #6b4bb8;
+  --color-matcha:          #a9ddb8;
+  --color-matcha-soft:     #dff4e4;
+  --color-mango:           #ffcf5c;
+  --color-mango-soft:      #fff0c2;
+  --color-blueberry:       #9cc9f5;
+  --color-blueberry-soft:  #ddebfc;
+  --color-vanilla:         #f5e3c8;
+  --color-vanilla-soft:    #fff4e2;
+  --color-cocoa-tone:      #b98a73;
+  --color-cocoa-soft:      #f0dfd5;
+
+  /* ── INK (cocoa-plum, never black) ── */
+  --color-cocoa:         #4a2333;   /* text + outlines */
+  --color-body:          #5e3346;
+  --color-muted:         #8a5b6e;
+  --color-on-cocoa:      #fff7f1;
+  --color-on-cocoa-soft: #e9c9d6;
 
   /* ── SEMANTIC ── */
-  --color-success:        #5db872;
-  --color-error:          #c64545;
+  --color-success:       #2f8f56;
+  --color-error:         #c0392b;
 
-  /* ── TYPOGRAPHY (Claude editorial system) ──
-     Display: Playfair Display (open-source ≈ Copernicus/Tiempos)
-     Body/UI: DM Sans (humanist sans ≈ StyreneB/Inter)            */
-  --font-display:   'Playfair Display', 'Georgia', serif;
-  --font-body:      'DM Sans', 'Inter', system-ui, sans-serif;
-  --font-mono:      'JetBrains Mono', 'Fira Code', monospace;
+  /* ── TYPE ── */
+  --font-display: 'Bagel Fat One', 'Nunito', system-ui, sans-serif;
+  --font-body:    'Nunito', system-ui, -apple-system, sans-serif;
+  --font-receipt: 'Courier Prime', 'Courier New', monospace;
 
-  /* ── SPACING (Claude section rhythm × Pinterest tight grid) ── */
-  --spacing-section: 96px;
-  --spacing-xxl:     48px;
-  --spacing-xl:      32px;
-  --spacing-lg:      24px;
-  --spacing-md:      16px;
-  --spacing-sm:      12px;
-  --spacing-xs:      8px;
-  --spacing-xxs:     4px;
-
-  /* ── BORDER RADIUS ──
-     Claude (lg 12px cards) × Pinterest (md 16px interactive, full pill) ── */
-  --radius-xs:   4px;
-  --radius-sm:   8px;
-  --radius-md:   12px;
-  --radius-lg:   16px;
-  --radius-xl:   24px;
+  /* ── SHAPE ── */
+  --radius-sm:   12px;
+  --radius-md:   18px;
+  --radius-lg:   24px;
+  --radius-xl:   32px;
   --radius-pill: 9999px;
+  --outline:     2.5px solid var(--color-cocoa);
 
-  /* ── SHADOW (single tier, Airbnb-inspired) ── */
-  --shadow-card:  0 2px 8px rgba(20,20,19,0.06), 0 1px 3px rgba(20,20,19,0.04);
-  --shadow-hover: 0 8px 24px rgba(20,20,19,0.10), 0 2px 8px rgba(20,20,19,0.06);
-  --shadow-modal: 0 24px 64px rgba(20,20,19,0.18);
+  /* ── SOFT SHADOW (only for objects that float: nav, receipt, modal) ── */
+  --shadow-float: 0 10px 28px rgba(74, 35, 51, 0.16), 0 2px 6px rgba(74, 35, 51, 0.08);
 }
 
-/* ── BASE RESET ── */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+/* ── FLAVOR SCOPES: set data-flavor on any element ── */
+[data-flavor='strawberry'] { --flavor: var(--color-strawberry); --flavor-soft: var(--color-strawberry-soft); }
+[data-flavor='taro']       { --flavor: var(--color-taro);       --flavor-soft: var(--color-taro-soft); }
+[data-flavor='matcha']     { --flavor: var(--color-matcha);     --flavor-soft: var(--color-matcha-soft); }
+[data-flavor='mango']      { --flavor: var(--color-mango);      --flavor-soft: var(--color-mango-soft); }
+[data-flavor='blueberry']  { --flavor: var(--color-blueberry);  --flavor-soft: var(--color-blueberry-soft); }
+[data-flavor='vanilla']    { --flavor: var(--color-vanilla);    --flavor-soft: var(--color-vanilla-soft); }
+[data-flavor='cocoa']      { --flavor: var(--color-cocoa-tone); --flavor-soft: var(--color-cocoa-soft); }
+
+/* ── BASE ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 96px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  scrollbar-color: var(--color-rose) var(--color-milk-deep);
 }
 
 body {
-  background-color: var(--color-canvas);
+  background-color: var(--color-milk);
   color: var(--color-body);
   font-family: var(--font-body);
-  font-size: 16px;
-  line-height: 1.55;
+  font-size: 17px;
+  line-height: 1.6;
+  overflow-x: hidden;
 }
 
-/* ── REUSABLE UTILITY CLASSES ── */
+main { overflow-x: clip; } /* entrance transforms must not widen the page on phones */
+img { max-width: 100%; display: block; }
+a { color: inherit; }
 
-/* Container */
+/* browser surfaces, themed */
+::selection { background: var(--color-rose); color: var(--color-cocoa); }
+input, select, textarea { caret-color: var(--color-rose-ink); accent-color: var(--color-rose); }
+::placeholder { color: var(--color-muted); opacity: 0.8; }
+:focus-visible {
+  outline: 3px solid var(--color-taro-ink);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+::-webkit-scrollbar { width: 12px; height: 12px; }
+::-webkit-scrollbar-track { background: var(--color-milk-deep); }
+::-webkit-scrollbar-thumb { background: var(--color-rose); border-radius: 9999px; border: 3px solid var(--color-milk-deep); }
+
+.skip-link {
+  position: absolute; left: 16px; top: -64px; z-index: 300;
+  background: var(--color-cocoa); color: var(--color-on-cocoa);
+  padding: 10px 18px; border-radius: var(--radius-pill); font-weight: 800; text-decoration: none;
+}
+.skip-link:focus { top: 12px; }
+
+/* ── LAYOUT ── */
 .container-petale {
-  max-width: 1280px;
+  max-width: 1200px;
   margin-inline: auto;
-  padding-inline: 24px;
+  padding-inline: clamp(16px, 4vw, 32px);
 }
+.section-rhythm { padding-block: clamp(72px, 10vw, 120px); }
 
-/* Section rhythm (Claude 96px editorial pacing) */
-.section-rhythm {
-  padding-block: var(--spacing-section);
-}
-
-/* Display typography (Claude: serif weight 400, negative tracking) */
-.display-xl {
+/* ── DISPLAY TYPE (Bagel Fat One, single weight) ── */
+.display-xl, .display-lg, .display-md {
   font-family: var(--font-display);
-  font-size: clamp(40px, 6vw, 64px);
   font-weight: 400;
-  line-height: 1.05;
-  letter-spacing: -1.5px;
-  color: var(--color-ink);
+  color: var(--color-cocoa);
+  text-wrap: balance;
+  letter-spacing: -0.005em;
+}
+.display-xl { font-size: clamp(2.6rem, 8.4vw, 6rem);   line-height: 0.98; }
+.display-lg { font-size: clamp(2.2rem, 5.2vw, 3.75rem); line-height: 1.02; }
+.display-md { font-size: clamp(1.8rem, 4vw, 2.75rem);   line-height: 1.06; }
+
+.lede { font-size: clamp(1.05rem, 1.6vw, 1.2rem); color: var(--color-body); max-width: 52ch; }
+
+/* ── BUTTONS ── */
+.btn-primary, .btn-secondary {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 48px; padding: 0 26px;
+  border: var(--outline); border-radius: var(--radius-pill);
+  color: var(--color-cocoa);
+  font-family: var(--font-body); font-size: 15px; font-weight: 800; line-height: 1;
+  text-decoration: none; white-space: nowrap; cursor: pointer;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease;
+}
+.btn-primary   { background: var(--color-rose); }
+.btn-secondary { background: var(--color-white); }
+.btn-primary:hover   { background: var(--color-rose-hover); transform: translateY(-3px) rotate(-1.5deg) scale(1.03); }
+.btn-secondary:hover { background: var(--color-mango-soft); transform: translateY(-3px) rotate(1.5deg) scale(1.03); }
+.btn-primary:active, .btn-secondary:active { transform: scale(0.94, 0.9); transition-duration: 0.08s; }
+.btn-primary:disabled, .btn-secondary:disabled {
+  background: var(--color-milk-deep); color: var(--color-muted); border-color: var(--color-muted);
+  cursor: not-allowed; transform: none;
 }
 
-.display-lg {
-  font-family: var(--font-display);
-  font-size: clamp(32px, 4vw, 48px);
-  font-weight: 400;
-  line-height: 1.1;
-  letter-spacing: -1px;
-  color: var(--color-ink);
-}
-
-.display-md {
-  font-family: var(--font-display);
-  font-size: clamp(24px, 3vw, 36px);
-  font-weight: 400;
-  line-height: 1.15;
-  letter-spacing: -0.5px;
-  color: var(--color-ink);
-}
-
-/* Button primary (Airbnb CTA structure × Petalé rose color) */
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background-color: var(--color-rose);
-  color: var(--color-on-primary);
-  font-family: var(--font-body);
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1;
-  padding: 14px 28px;
-  border-radius: var(--radius-pill);
-  border: none;
-  cursor: pointer;
-  text-decoration: none;
-  transition: background-color 0.2s ease, transform 0.15s ease;
-  white-space: nowrap;
-}
-
-.btn-primary:hover {
-  background-color: var(--color-rose-deep);
-  transform: translateY(-1px);
-}
-
-.btn-primary:active {
-  transform: translateY(0);
-  background-color: var(--color-rose-deep);
-}
-
-/* Button secondary */
-.btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background-color: transparent;
-  color: var(--color-ink);
-  font-family: var(--font-body);
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1;
-  padding: 13px 27px;
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--color-hairline);
-  cursor: pointer;
-  text-decoration: none;
-  transition: border-color 0.2s ease, background-color 0.2s ease;
-  white-space: nowrap;
-}
-
-.btn-secondary:hover {
-  border-color: var(--color-ink);
-  background-color: var(--color-surface-soft);
-}
-
-/* Pinterest filter chip */
+/* ── CHIPS (filters, flavor tags) ── */
 .chip {
-  display: inline-flex;
-  align-items: center;
-  font-family: var(--font-body);
-  font-size: 14px;
-  font-weight: 500;
-  padding: 8px 18px;
-  border-radius: var(--radius-pill);
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.2s, color 0.2s;
-  background-color: var(--color-surface-card);
-  color: var(--color-body);
+  display: inline-flex; align-items: center; gap: 8px;
+  min-height: 42px; padding: 0 18px;
+  border: 2px solid var(--color-cocoa); border-radius: var(--radius-pill);
+  background: var(--color-white); color: var(--color-cocoa);
+  font-family: var(--font-body); font-size: 14px; font-weight: 800; cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.15s;
+}
+.chip:hover { transform: translateY(-2px) rotate(-1deg); background: var(--color-mango-soft); }
+.chip:active { transform: scale(0.94); }
+.chip.active { background: var(--flavor, var(--color-rose)); }
+.chip .dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--color-cocoa); background: var(--flavor, var(--color-rose)); flex: none; }
+
+/* ── STICKER LABEL (die-cut, slightly rotated) ── */
+.sticker {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 14px;
+  border: 2.5px solid var(--color-cocoa); border-radius: var(--radius-pill);
+  background: var(--sticker, var(--color-mango));
+  color: var(--color-cocoa);
+  font-family: var(--font-body); font-size: 13px; font-weight: 800; line-height: 1.2;
+  transform: rotate(var(--r, -4deg));
+  white-space: nowrap;
 }
 
-.chip:hover {
-  background-color: var(--color-hairline);
+/* ── SURFACES ── */
+.pearls {
+  background-color: var(--surface, var(--color-milk));
+  background-image:
+    radial-gradient(circle at 12px 12px, color-mix(in oklab, var(--flavor, var(--color-rose)) 40%, transparent) 4px, transparent 4.5px),
+    radial-gradient(circle at 34px 34px, color-mix(in oklab, var(--flavor, var(--color-rose)) 22%, transparent) 3px, transparent 3.5px);
+  background-size: 44px 44px;
 }
 
-.chip.active {
-  background-color: var(--color-ink);
-  color: var(--color-on-primary);
+.photo-frame {
+  border: var(--outline);
+  overflow: hidden;
+  background: var(--color-milk-deep);
+}
+.photo-frame img { width: 100%; height: 100%; object-fit: cover; }
+.arch { border-radius: 999px 999px var(--radius-lg) var(--radius-lg); }
+
+/* scalloped hanging edge: put on a section, color via --edge */
+.scallop-b { position: relative; }
+.scallop-b::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -17px; height: 18px; z-index: 2;
+  background: radial-gradient(circle at 50% 0, var(--edge, var(--color-blush)) 0 17px, transparent 17.5px) 0 0 / 34px 18px repeat-x;
+  pointer-events: none;
+}
+.scallop-t { position: relative; }
+.scallop-t::before {
+  content: ''; position: absolute; left: 0; right: 0; top: -17px; height: 18px; z-index: 2;
+  background: radial-gradient(circle at 50% 100%, var(--edge, var(--color-blush)) 0 17px, transparent 17.5px) 0 0 / 34px 18px repeat-x;
+  pointer-events: none;
 }
 
-/* Badge pill (Claude-inspired) */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  font-family: var(--font-body);
-  font-size: 12px;
-  font-weight: 500;
-  padding: 4px 12px;
-  border-radius: var(--radius-pill);
-  background-color: var(--color-surface-card);
-  color: var(--color-ink);
-}
+/* section header pattern (left-aligned by default) */
+.section-head { max-width: 640px; margin-bottom: clamp(32px, 5vw, 56px); }
+.section-head h2 { margin-bottom: 22px; }
+.section-head.center { margin-inline: auto; text-align: center; }
+.section-head.center .lede { margin-inline: auto; }
 
-.badge-rose {
-  background-color: var(--color-rose-light);
-  color: var(--color-rose-deep);
-}
-
-/* Section label (uppercase caption) */
-.section-label {
-  font-family: var(--font-body);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--color-rose);
-}
-
-/* Hairline divider */
-.hairline {
-  border: none;
-  border-top: 1px solid var(--color-hairline);
+/* ── MOTION SAFETY ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
